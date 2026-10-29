@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Replayable benchmark dashboard for an inspectable LLM cost routing gateway.">
+  <title>LLM Cost Cutter — benchmark replay</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <header class="top"><a class="brand" href="./">LLM Cost Cutter<span> / replay lab</span></a><a class="source" href="https://github.com/HariHaran9597/llm-cost-cutter">Source ↗</a></header>
+  <main>
+    <section class="hero"><div class="eyebrow">OPEN BENCHMARK · V0.1</div><h1>Spend less on routine<br>LLM requests.</h1><p>Replay the same hand-checked tasks through a fixed model and a deterministic routing policy. Inspect every decision and its estimated cost.</p><div class="warning">Replay only. This page makes no live model calls; timings are simulated.</div></section>
+    <section class="metrics" id="metrics" aria-live="polite"></section>
+    <section class="panel"><div class="panel-head"><div><div class="eyebrow">ROUTING POLICY</div><h2>Simple tasks go small. Hard tasks stay strong.</h2></div><span class="tag">INSPECTABLE · DETERMINISTIC</span></div><div class="policy"><div><b>GPT‑4.1 mini</b><span>Extraction · classification · summarization</span></div><div class="arrow">→</div><div><b>GPT‑4.1</b><span>Reasoning · unknown requests · explicit quality tier</span></div></div></section>
+    <section class="panel"><div class="panel-head"><div><div class="eyebrow">REQUEST-LEVEL REPLAY</div><h2>Every task, every route</h2></div><label class="filter">Task type <select id="task-filter"><option value="all">All tasks</option></select></label></div><div class="table-wrap"><table><thead><tr><th>Task</th><th>Type</th><th>Selected model</th><th>Quality</th><th>Baseline cost</th><th>Routed cost</th><th>Route reason</th></tr></thead><tbody id="rows"></tbody></table></div></section>
+    <footer><p id="method"></p><p>Price rates checked <span id="price-date"></span>. <a href="https://developers.openai.com/api/docs/pricing/">Official pricing source</a>. Estimated charges are not invoices.</p><p>Local live gateway requires a server-side provider key and an API token. Public demo contains benchmark replays only.</p></footer>
+  </main>
+</body>
+</html>
