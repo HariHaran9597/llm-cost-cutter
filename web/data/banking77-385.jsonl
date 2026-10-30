@@ -1,0 +1,385 @@
+{"id": "e616dac41ac6f51f", "input": "i was supposed to get a refund but my balance hasn't changed, why not?", "expected": "Refund_not_showing_up"}
+{"id": "1c9bbf4721cc16ea", "input": "It's been a week and I have done everything that I was asked to do and still nothing. I have contacted the seller and have not gotten a response. Please understand my frustration and put the money back in my account.", "expected": "Refund_not_showing_up"}
+{"id": "5098e32f29b9cddb", "input": "I bought something and returned it and the money from the return isn't in my account.", "expected": "Refund_not_showing_up"}
+{"id": "5d278a14ba71ea89", "input": "Where is my refund? I have been checking my account all day.", "expected": "Refund_not_showing_up"}
+{"id": "c1ceff4ff3a9a5b1", "input": "I requested a refund from a merchant days ago but I do not see it in my account.", "expected": "Refund_not_showing_up"}
+{"id": "9b0190c1d181fc80", "input": "How do I use my new card?", "expected": "activate_my_card"}
+{"id": "1b430d82697280bf", "input": "Assist me please with card activation.", "expected": "activate_my_card"}
+{"id": "5b0c855115d53991", "input": "What do I need to do to activate my card?", "expected": "activate_my_card"}
+{"id": "7e31299ee448ac75", "input": "How can I start using my card?", "expected": "activate_my_card"}
+{"id": "a91ebba854553d65", "input": "How do I activate a card I received?", "expected": "activate_my_card"}
+{"id": "f8ef619d2454835e", "input": "What is the youngest age in order to have an account?", "expected": "age_limit"}
+{"id": "2277a22e3682e091", "input": "Do you offer services for children to have money saving experience?", "expected": "age_limit"}
+{"id": "fd486cce751684cd", "input": "Can I open an account for a child?", "expected": "age_limit"}
+{"id": "b0fe6da3153cb777", "input": "How old do my children need to be to open an account?", "expected": "age_limit"}
+{"id": "dec3277a79b3b374", "input": "What age do I have to be?", "expected": "age_limit"}
+{"id": "fddfda605a725cc6", "input": "can google pay be used to make a top-up", "expected": "apple_pay_or_google_pay"}
+{"id": "bf7985becb4ab597", "input": "is apple pay eligible for top up", "expected": "apple_pay_or_google_pay"}
+{"id": "fe9f7075ecd2acbe", "input": "Is it possible to use Apple Pay to put money in my account?", "expected": "apple_pay_or_google_pay"}
+{"id": "97915fd771ec560a", "input": "I got my American Express in Apple Bay but top up is not working", "expected": "apple_pay_or_google_pay"}
+{"id": "1d0f967cc3969a78", "input": "Top up on my Google Pay isn't working.", "expected": "apple_pay_or_google_pay"}
+{"id": "8825b39dd09dbc73", "input": "What type of ATMs accept this card?", "expected": "atm_support"}
+{"id": "5cb74e00c26b2d5e", "input": "If I have this card, which ATMs can I go to?", "expected": "atm_support"}
+{"id": "cd3233b7a50a7cd3", "input": "Where can I use this card at an ATM?", "expected": "atm_support"}
+{"id": "b2d71b5daf12581f", "input": "How do I know which ATMs will accept this card?", "expected": "atm_support"}
+{"id": "63ddbd4fb7c4e54d", "input": "What ATMs can I withdraw money from?", "expected": "atm_support"}
+{"id": "3efcff6f73d4a5c1", "input": "Can you explain where I can find the auto-top option?", "expected": "automatic_top_up"}
+{"id": "dea7b4b2ed49dfd9", "input": "Why are there limits on auto top-up?", "expected": "automatic_top_up"}
+{"id": "84ea23d54420683f", "input": "Can I have it add money at certain time intervals when I travel?", "expected": "automatic_top_up"}
+{"id": "c6ed4f9d58af854f", "input": "What's the limit on automatic top-up?", "expected": "automatic_top_up"}
+{"id": "d785a994eef21cc4", "input": "Is there an auto top-up option?", "expected": "automatic_top_up"}
+{"id": "4f7a655c89f45145", "input": "I made an out of country transfer and it hasn't went through yet.", "expected": "balance_not_updated_after_bank_transfer"}
+{"id": "4520f0457e92c0b4", "input": "I made a bank transfer a couple of hours ago from my UK account.  It hasn't appeared, can you check to make sure it went through?", "expected": "balance_not_updated_after_bank_transfer"}
+{"id": "70954a6ebf9dfe88", "input": "I had cash transferred but the balance did not change.", "expected": "balance_not_updated_after_bank_transfer"}
+{"id": "883e624996158c9e", "input": "How long until my transfer will be available to me", "expected": "balance_not_updated_after_bank_transfer"}
+{"id": "8259b000c8c1f022", "input": "Could you please check one of my transfer which i made few hours ago from my UK bank account, as its not showing yet.", "expected": "balance_not_updated_after_bank_transfer"}
+{"id": "14f6386e28f499bd", "input": "I deposited cash this morning and I am still waiting", "expected": "balance_not_updated_after_cheque_or_cash_deposit"}
+{"id": "79f9699faa3e3b72", "input": "I sent a cheque  a few days ago and nothing has happened to my account yet. Can you please check on this for me?", "expected": "balance_not_updated_after_cheque_or_cash_deposit"}
+{"id": "c1655ee6a92ebbc7", "input": "What happened to the cash that I tried to deposit into my account? It's gone!", "expected": "balance_not_updated_after_cheque_or_cash_deposit"}
+{"id": "379c9133bb0b28d1", "input": "IM still waiting for my account to update from a cash deposit?", "expected": "balance_not_updated_after_cheque_or_cash_deposit"}
+{"id": "0d22b27cf3030908", "input": "Balance hasn't been updated following a cheque or cash deposit", "expected": "balance_not_updated_after_cheque_or_cash_deposit"}
+{"id": "fbcafdf05a9de443", "input": "Why did I receive an error message saying that my transfer was not possible?", "expected": "beneficiary_not_allowed"}
+{"id": "331d354552aa357f", "input": "Why isn't my transfer going through? I get a message saying it's not possible. I've had no issues in the past.", "expected": "beneficiary_not_allowed"}
+{"id": "017cd9605738df02", "input": "What's the deal with no cryptocurrency on your app?", "expected": "beneficiary_not_allowed"}
+{"id": "e6a564f63b55792c", "input": "I've transferred money before without issue but now I am encountering an error stating that it isn't possible. Why is that?", "expected": "beneficiary_not_allowed"}
+{"id": "ce916c59bca3b76c", "input": "I have a cryptocurrency exchange that won't go through. Please help me process it.", "expected": "beneficiary_not_allowed"}
+{"id": "83f6517ef658807d", "input": "I'd like to cancel a transfer", "expected": "cancel_transfer"}
+{"id": "78d52d03b973fdae", "input": "Help me cancel my transaction", "expected": "cancel_transfer"}
+{"id": "e1a5edb5f0345465", "input": "Cancel my last transfer", "expected": "cancel_transfer"}
+{"id": "759a6efa8d4ba221", "input": "This is URGENT, I typed the wrong payment information for a payment I needed to make and have clicked send, I need to reverse the transaction immediately.", "expected": "cancel_transfer"}
+{"id": "3e4ebb0ccd786111", "input": "I need help cancelling a transaction.", "expected": "cancel_transfer"}
+{"id": "0dff8c0f51ae3432", "input": "Since my card is about to expire, I need a new one.", "expected": "card_about_to_expire"}
+{"id": "a617e294cfeceaf2", "input": "It appears my card expires next month, can I order a new one?", "expected": "card_about_to_expire"}
+{"id": "56c93b868b02f221", "input": "I need to order a  new card, mine is about to expire and I need to know how much it will cost and how long until I receive it.", "expected": "card_about_to_expire"}
+{"id": "80d31a77c1864e02", "input": "I need a new card, my current card is nearly expired.", "expected": "card_about_to_expire"}
+{"id": "0045def069a89b29", "input": "Once my card expires, what should I do?", "expected": "card_about_to_expire"}
+{"id": "642913bf96b5b032", "input": "Where can I use my card?", "expected": "card_acceptance"}
+{"id": "eab327243a2d763b", "input": "Where is my card accepted?", "expected": "card_acceptance"}
+{"id": "7e9fef3fafa75f65", "input": "areas card is accpeted", "expected": "card_acceptance"}
+{"id": "9611142b5847fbb0", "input": "Where am I able to use the card?", "expected": "card_acceptance"}
+{"id": "b802e72d3975073d", "input": "Will I be able to use my card anywhere?", "expected": "card_acceptance"}
+{"id": "bfe9576597e25432", "input": "I still don't have my card after 2 weeks.  What should I do?", "expected": "card_arrival"}
+{"id": "d89c3ba8ae5fbf88", "input": "I think something went wrong with my card delivery as I haven't received it yet.", "expected": "card_arrival"}
+{"id": "ce910705fe8bddac", "input": "What is the tracking number for my card that was mailed?", "expected": "card_arrival"}
+{"id": "f3b7b46e7249c36b", "input": "I ordered a card but it has not arrived. Help please!", "expected": "card_arrival"}
+{"id": "3485722fdd107f82", "input": "How long should my new card take to arrive?", "expected": "card_arrival"}
+{"id": "5ce15a2a105853f5", "input": "When will my card arrive?", "expected": "card_delivery_estimate"}
+{"id": "4a3272f5c8cd78c7", "input": "I live in the US, how long will it take for delivery?", "expected": "card_delivery_estimate"}
+{"id": "68c66021525f2e11", "input": "Can you get me my card fast?", "expected": "card_delivery_estimate"}
+{"id": "1625e56e2316cce1", "input": "How long does it take to get my card? Can I choose when to receive it?", "expected": "card_delivery_estimate"}
+{"id": "1e9dda6b3a8896b5", "input": "When will the card arrive?", "expected": "card_delivery_estimate"}
+{"id": "ba1ef1bdddc5cd4a", "input": "Why won't my card show up on the app?", "expected": "card_linking"}
+{"id": "fa6ddebfce7a9965", "input": "I already have one of your cards, how do I link them?", "expected": "card_linking"}
+{"id": "4748827e80b091d4", "input": "how do I link an already existing card?", "expected": "card_linking"}
+{"id": "7164004de4d8338d", "input": "How do I link my card", "expected": "card_linking"}
+{"id": "48647b63233dab3e", "input": "Can I link another card to my account?", "expected": "card_linking"}
+{"id": "7e247e6fa01b3c22", "input": "Help me.  My card doesn't work.", "expected": "card_not_working"}
+{"id": "2b201f8cfb19e9df", "input": "My card doesn't work.", "expected": "card_not_working"}
+{"id": "d1b670d3f985b9bc", "input": "How can I get my physical card to work?", "expected": "card_not_working"}
+{"id": "5198b4d678f38929", "input": "How do I find out why my card won't work?", "expected": "card_not_working"}
+{"id": "2902e2d8374e575e", "input": "My card suddenly quit working.", "expected": "card_not_working"}
+{"id": "36ad5d0e1d67f873", "input": "Why do I get charged additional fees on some payments, but not others?", "expected": "card_payment_fee_charged"}
+{"id": "e00ce820eecd1a04", "input": "Why was I charged an extra fee when using a card?", "expected": "card_payment_fee_charged"}
+{"id": "e13e5c257085a4bc", "input": "Why was a charged a fee for using the card?", "expected": "card_payment_fee_charged"}
+{"id": "abe11b0188431fad", "input": "They charged me for paying with my card.", "expected": "card_payment_fee_charged"}
+{"id": "0f97170e1ab55a5b", "input": "For the first time I got a fee on my account. How do I know when you charge these fees?", "expected": "card_payment_fee_charged"}
+{"id": "56ee1b385823a64f", "input": "There is a fraudulent charge on my statement.", "expected": "card_payment_not_recognised"}
+{"id": "4698668cdff2c904", "input": "I have an unauthorized transaction on my statement", "expected": "card_payment_not_recognised"}
+{"id": "6a19fc6d0cb715d1", "input": "Payment i did not do", "expected": "card_payment_not_recognised"}
+{"id": "5bb6e30d8c848453", "input": "Has someone accessed my card there are payments I did not make that are showing up on the app.", "expected": "card_payment_not_recognised"}
+{"id": "7c26612d1ddc5976", "input": "What should I do if I see a payment I didn't make?", "expected": "card_payment_not_recognised"}
+{"id": "94cf80fbab839854", "input": "Why am I being charged more ?", "expected": "card_payment_wrong_exchange_rate"}
+{"id": "103aea9e215bd779", "input": "Why is your exchange rate for my card payment wrong", "expected": "card_payment_wrong_exchange_rate"}
+{"id": "47374cea3265c0fb", "input": "I purchased something in a foreign currency but the rate applied is wrong", "expected": "card_payment_wrong_exchange_rate"}
+{"id": "ba87d65fd04fc69b", "input": "I don't think my card payment exchange rate is correct.", "expected": "card_payment_wrong_exchange_rate"}
+{"id": "83d2b8c83461bb87", "input": "I bought an item and noticed the exchange rate was not correct.", "expected": "card_payment_wrong_exchange_rate"}
+{"id": "ac5da9b22dcfe599", "input": "My card was taken by the ATM.", "expected": "card_swallowed"}
+{"id": "a1e76642cccd104f", "input": "ATM still has my card", "expected": "card_swallowed"}
+{"id": "aa726c2ae8d3107a", "input": "What do I do if an ATM \"stole\" my card?", "expected": "card_swallowed"}
+{"id": "e5260517a4695e96", "input": "My card has been swallowed by an ATM", "expected": "card_swallowed"}
+{"id": "d439e06ce77c3365", "input": "The stupid machine just swallowed my card!! I need a new one ASAP", "expected": "card_swallowed"}
+{"id": "8804856cc3305c21", "input": "Why was I charged a fee for withdrawing cash?", "expected": "cash_withdrawal_charge"}
+{"id": "59bcc1e8ac91e47c", "input": "It looks like I was charged a withdrawal fee for going to my ATM. Why is that because I haven't been charged previously for doing so?", "expected": "cash_withdrawal_charge"}
+{"id": "dac210c6eaad4c20", "input": "Why did I have to pay a fee when I got cash?", "expected": "cash_withdrawal_charge"}
+{"id": "fe58eb8d438bc455", "input": "Why are fees charged on cash withdrawals? I went to withdraw some money earlier today after shopping. There's a fee that wasn't there before.", "expected": "cash_withdrawal_charge"}
+{"id": "4dc56fcdca2d2a51", "input": "More fees, this time for withdrawing my own cash. Why are you robbing me?", "expected": "cash_withdrawal_charge"}
+{"id": "10afe1ce59894ae6", "input": "My account has a weird withdrawal.", "expected": "cash_withdrawal_not_recognised"}
+{"id": "0f7b2a8191dada71", "input": "I just lost my wallet and I see that they are already withdrawing money from my account. How can I stop this?", "expected": "cash_withdrawal_not_recognised"}
+{"id": "09b090a9de16a6d6", "input": "There is an unauthorized cash withdrawal from my account for 500£.  I definitely didn't make this withdrawal.  I need your help.", "expected": "cash_withdrawal_not_recognised"}
+{"id": "b33ccb9153f9875b", "input": "There is a problem with my card. Somebody has removed money from my account in a town I haven't been to. Can you please freeze my account immediately?", "expected": "cash_withdrawal_not_recognised"}
+{"id": "21a40f872a0966cf", "input": "The app is showing an ATM withdrawl that I didn't make.", "expected": "cash_withdrawal_not_recognised"}
+{"id": "0eb4ad6fec7aa27e", "input": "I am travelling for two more weeks but really need to change my PIN asap. What do I do?", "expected": "change_pin"}
+{"id": "e94c3635b603eb58", "input": "Please tell me which cash machines will allow me to change my pin.", "expected": "change_pin"}
+{"id": "95dbff8bfe1ad9bf", "input": "How do I update my PIN to a new number?", "expected": "change_pin"}
+{"id": "abc4077cd205333b", "input": "I would like to change my PIN but I am not currently in the country.", "expected": "change_pin"}
+{"id": "ff63a784f0cce34f", "input": "I want to choose a different PIN.", "expected": "change_pin"}
+{"id": "88163d084caf5736", "input": "What do I do if I think my card was improperly used?", "expected": "compromised_card"}
+{"id": "510930ddb66035b8", "input": "someone is using my account", "expected": "compromised_card"}
+{"id": "36726ef7b770cdb5", "input": "Someone is using my account to do online shopping! Please freeze it asap", "expected": "compromised_card"}
+{"id": "230f4e0eaee699f2", "input": "I think my child used my card while I wasn't home.", "expected": "compromised_card"}
+{"id": "6e8d9b0b74ad67e9", "input": "How do I freeze my account?", "expected": "compromised_card"}
+{"id": "1fdf5ce270e9d0fe", "input": "The NFC payment wouldn't work on the bus today. Help?", "expected": "contactless_not_working"}
+{"id": "1a838c6ad5053f3b", "input": "How do I make contactless work", "expected": "contactless_not_working"}
+{"id": "7da958498c2359c4", "input": "I couldn't use my contactless this morning, it wasn't accepted.", "expected": "contactless_not_working"}
+{"id": "eaaa4205183f87c4", "input": "I wanted to use my card contactless but it doesn't seem to be working, what could be the problem?", "expected": "contactless_not_working"}
+{"id": "d9686316e56c92a0", "input": "what is required documents for new card process ?", "expected": "contactless_not_working"}
+{"id": "c675cf175f3cd9f9", "input": "What countries do you do business in?", "expected": "country_support"}
+{"id": "56780acd8bfb37b3", "input": "Can I get a card even if I live outside the UK?", "expected": "country_support"}
+{"id": "3479a1e99275f13c", "input": "Where do you support?", "expected": "country_support"}
+{"id": "e81557fc26d873a2", "input": "I am from the EU, can I sign up?", "expected": "country_support"}
+{"id": "7baf3183821be921", "input": "What countries are supported?", "expected": "country_support"}
+{"id": "9f0b5e657dd33dce", "input": "Why is my debit card being declined when I have money?", "expected": "declined_card_payment"}
+{"id": "857eb3e46fd9ecef", "input": "Can you look at my account ans see why my card was declined", "expected": "declined_card_payment"}
+{"id": "7e4c159070dd3aeb", "input": "My card payment did not work.", "expected": "declined_card_payment"}
+{"id": "d71357b3f7346366", "input": "I have no idea why my card payment did not work.", "expected": "declined_card_payment"}
+{"id": "dfb72c71ac6274a5", "input": "Please explain why my card was declined?", "expected": "declined_card_payment"}
+{"id": "477cbb8339f45cd2", "input": "Why was I declined at the ATM today when I was trying to make a withdraw?", "expected": "declined_cash_withdrawal"}
+{"id": "85edef0d8d1afad4", "input": "The ATM is declining my card. I tried at two different ATMs. Can you tell me if there's anything wrong with my account?", "expected": "declined_cash_withdrawal"}
+{"id": "2f073b5f7475df83", "input": "i tried to withdraw money from an atm and i was declined on front of my friends. Why did this happen?", "expected": "declined_cash_withdrawal"}
+{"id": "7672573fd514cc94", "input": "atm would not give me cash", "expected": "declined_cash_withdrawal"}
+{"id": "46a4317e629f4633", "input": "The ATM keeps declining my card. I tried at two different ATMs. Can you tell me if there's an issue with my account?", "expected": "declined_cash_withdrawal"}
+{"id": "8e536fd7143c2532", "input": "My transfer got declined.", "expected": "declined_transfer"}
+{"id": "497f918e92a98709", "input": "Good morning. I tried to make a purchase with my credit card last night and again this morning. Both times it was declined. Can you investigate?", "expected": "declined_transfer"}
+{"id": "6fd91f94ddef072f", "input": "When I submit a transfer, it is being declined.  The information I put in has been reviewed.", "expected": "declined_transfer"}
+{"id": "66d15f371cb38c34", "input": "Why was the transfer declined?", "expected": "declined_transfer"}
+{"id": "1d8f63350c70205c", "input": "I was attempting to purchase a golf club off eBay yesterday, but my credit card was declined. I tried multiple times, and again this morning. Can you check into my card please?", "expected": "declined_transfer"}
+{"id": "e72f1f6b8ea8a331", "input": "I have a direct debit transaction I have not set up, but would like to .", "expected": "direct_debit_payment_not_recognised"}
+{"id": "099fde05f4fee589", "input": "There was a transaction from two weeks ago from a business that I don't know. I'm fairly certain it wasn't me who made it, but is it an option to trace it to confirm?", "expected": "direct_debit_payment_not_recognised"}
+{"id": "26d7741565e489d6", "input": "There's a direct debit on my account that I didn't authorize", "expected": "direct_debit_payment_not_recognised"}
+{"id": "6d00a42e2232ce55", "input": "Weird charges are appearing in my debit account.", "expected": "direct_debit_payment_not_recognised"}
+{"id": "0ad54f03d1e2aec9", "input": "Help me.  There is a Direct Debit that I didn't make.", "expected": "direct_debit_payment_not_recognised"}
+{"id": "b93356511618f569", "input": "How many virtual cards do I get?", "expected": "disposable_card_limits"}
+{"id": "b17ad376b0234b9e", "input": "How many disposable cards is the limit?", "expected": "disposable_card_limits"}
+{"id": "4ee852cd1ab48757", "input": "How many times can I use the disposable virtual card I have?", "expected": "disposable_card_limits"}
+{"id": "e114ff6e676ec409", "input": "What are the limits to using disposable virtual cards?", "expected": "disposable_card_limits"}
+{"id": "4ae0371efaa70bec", "input": "Can you explain the virtual cards limit?", "expected": "disposable_card_limits"}
+{"id": "b3791e6cdf7933a4", "input": "I have moved.  Where can I update my details?", "expected": "edit_personal_details"}
+{"id": "eb039bbd1d1d917b", "input": "I want to change my name.", "expected": "edit_personal_details"}
+{"id": "7e86301902eccca0", "input": "My address has updated and I need to change it.", "expected": "edit_personal_details"}
+{"id": "d206e1fdf9cee335", "input": "What do i have to do to change my name?", "expected": "edit_personal_details"}
+{"id": "87279dc5cd52d4d0", "input": "I need help changing my last name on my account.", "expected": "edit_personal_details"}
+{"id": "b591756e8686ca33", "input": "Does it cost anything for exchanges?", "expected": "exchange_charge"}
+{"id": "70978e49e4357df5", "input": "Is there a fee for exchanging currencies?", "expected": "exchange_charge"}
+{"id": "2405b1c5735c318a", "input": "How much more do I have to pay to exchange currencies?", "expected": "exchange_charge"}
+{"id": "b791cf78d0a06c4b", "input": "how much you charge for exhcange", "expected": "exchange_charge"}
+{"id": "266b0c11f5e22c08", "input": "Is there an exchange fee?", "expected": "exchange_charge"}
+{"id": "9471995ee89deaf5", "input": "Can you explain your exchange rate policy to me?", "expected": "exchange_rate"}
+{"id": "b4798ab0d0c28e83", "input": "Where did your guys exchange rates come from?", "expected": "exchange_rate"}
+{"id": "5aacc255e09d9587", "input": "What is the exchange rate like on this app?", "expected": "exchange_rate"}
+{"id": "d0e1dd32a4f6f933", "input": "The exchange rates are?", "expected": "exchange_rate"}
+{"id": "a53e422dd89b1c69", "input": "What is the current exchange rate for me?", "expected": "exchange_rate"}
+{"id": "3df1941d11ae365b", "input": "Can am I able to exchange currencies?", "expected": "exchange_via_app"}
+{"id": "d489dc0ee2c8d27a", "input": "What currency's can i exchange for?", "expected": "exchange_via_app"}
+{"id": "0c2e37f74ab1d004", "input": "If I receive foreign currencies, am I able to exchange them on the app?", "expected": "exchange_via_app"}
+{"id": "bc731dd2149e290a", "input": "If I wanted to make a change from GBP to AUD what is the process?", "expected": "exchange_via_app"}
+{"id": "322d58759b824dc3", "input": "What all currencies can be exchanged?", "expected": "exchange_via_app"}
+{"id": "c825600f6eaf415f", "input": "Can you help me with a weird charge?  It's a pound charge that never goes away from the statement view on the app I'm using.  It's not described as anything but \"Pending\", and that status has never changed during the last two days.", "expected": "extra_charge_on_statement"}
+{"id": "16c7e2ad13df43eb", "input": "I can see an extra 1£ charge on my app. Why did you charge me extra?", "expected": "extra_charge_on_statement"}
+{"id": "daa0ab9e7328c3ed", "input": "$1 extra has been charged on my statement, why is that?", "expected": "extra_charge_on_statement"}
+{"id": "c271c107be0b153e", "input": "Why is there an extra 1 pound charge on my card?", "expected": "extra_charge_on_statement"}
+{"id": "527a01385efd0f89", "input": "My statement has a dollar I have been charged showing up on it.", "expected": "extra_charge_on_statement"}
+{"id": "6137f5b10e4cabea", "input": "Why couldn't I complete a transfer?", "expected": "failed_transfer"}
+{"id": "0d7b0053f515dcd2", "input": "Is the system down? I've been trying to do a transfer and have failed?", "expected": "failed_transfer"}
+{"id": "856e6b67b82a5aca", "input": "help me with my transfer", "expected": "failed_transfer"}
+{"id": "b1988df305aa7ff8", "input": "Says my transfer can't be completed?", "expected": "failed_transfer"}
+{"id": "f2a4fde18c3f2a49", "input": "I can not seem to make a successful transfer, can you tell me what I'm doing wrong?", "expected": "failed_transfer"}
+{"id": "f6982298e7cd6eae", "input": "Do you support all fiat currencies?", "expected": "fiat_currency_support"}
+{"id": "dc809ca7e9777f05", "input": "Will you handle EUR?", "expected": "fiat_currency_support"}
+{"id": "0547c912420b3009", "input": "What fiat currencies are supported for holding and exchange?", "expected": "fiat_currency_support"}
+{"id": "3fe7ad9a395cdfaa", "input": "Do you work with all fiat currencies?", "expected": "fiat_currency_support"}
+{"id": "58558727159d2c89", "input": "Can I exchange currencies?", "expected": "fiat_currency_support"}
+{"id": "34c9b55715c67027", "input": "how secure is a disposable virtual card", "expected": "get_disposable_virtual_card"}
+{"id": "75735814867c756c", "input": "I have a disposable virtual card here, so would you tell me what to do with it?", "expected": "get_disposable_virtual_card"}
+{"id": "e30cd81103632c1b", "input": "Can I create a disposable virtual card?", "expected": "get_disposable_virtual_card"}
+{"id": "9e7f01d22d2301e3", "input": "How do I use a disposable virtual card?", "expected": "get_disposable_virtual_card"}
+{"id": "f7480782b9c94b23", "input": "where do I request a disposable virtual card?", "expected": "get_disposable_virtual_card"}
+{"id": "96c3b5c685a11e29", "input": "I still don't have my pin.", "expected": "get_physical_card"}
+{"id": "841e4e7a71fc52d7", "input": "where can user find pin?", "expected": "get_physical_card"}
+{"id": "981d5861a096bfda", "input": "How do I find my card PIN?", "expected": "get_physical_card"}
+{"id": "52ce2322978111b9", "input": "About this card PIN?", "expected": "get_physical_card"}
+{"id": "188e8c41c5cbee19", "input": "Where can I find the card PIN?", "expected": "get_physical_card"}
+{"id": "11a74b12ac2af133", "input": "What is the procedure for getting another card?", "expected": "getting_spare_card"}
+{"id": "2321e742b6d7c809", "input": "Would it be possible to get another card?", "expected": "getting_spare_card"}
+{"id": "39456c4aba8af384", "input": "Can i have a card to my daughter?", "expected": "getting_spare_card"}
+{"id": "f388d53aed860dfd", "input": "Am I able to get a second card?", "expected": "getting_spare_card"}
+{"id": "a13646aec0cfdc33", "input": "Where do I request another card?", "expected": "getting_spare_card"}
+{"id": "dcee77bf4b8eecd0", "input": "Is there an option to have a virtual card?", "expected": "getting_virtual_card"}
+{"id": "f4208aabf8f35799", "input": "Are virtual cards available to get?", "expected": "getting_virtual_card"}
+{"id": "ae39e5c745359b00", "input": "Where can I get a virtual card?", "expected": "getting_virtual_card"}
+{"id": "3cbc3e0cfb5f99a2", "input": "Can you tell me where I can order a virtual card?", "expected": "getting_virtual_card"}
+{"id": "3e29500d78624803", "input": "Where do I find the virtual card?", "expected": "getting_virtual_card"}
+{"id": "ba4c264b7c869491", "input": "Help me please!  My card was stolen!", "expected": "lost_or_stolen_card"}
+{"id": "20dba58c8a3cf9b9", "input": "I need help with a lost card", "expected": "lost_or_stolen_card"}
+{"id": "0692d501533c83c7", "input": "How do I report my card lost or stolen?", "expected": "lost_or_stolen_card"}
+{"id": "4e16e18220719e0b", "input": "What should I do if I lost my card?", "expected": "lost_or_stolen_card"}
+{"id": "1cf7f65ae38f8a2e", "input": "I believe my credit card was stolen.", "expected": "lost_or_stolen_card"}
+{"id": "a72880082f1bcf97", "input": "Someone stole my phone yesterday :( is there anything I need to do?", "expected": "lost_or_stolen_phone"}
+{"id": "e563fff5a11aa8b8", "input": "My phone is not with me at the moment so I will not be able to access the app.", "expected": "lost_or_stolen_phone"}
+{"id": "ae8627885d27855a", "input": "My things were stolen yesterday and I can't use any apps or anything, so I am going to need some help.", "expected": "lost_or_stolen_phone"}
+{"id": "83c41b775c20e050", "input": "My phone is not on me.  How can I use the app?", "expected": "lost_or_stolen_phone"}
+{"id": "52a9c178e533aac1", "input": "My phone was stolen", "expected": "lost_or_stolen_phone"}
+{"id": "2e1036e6994d5507", "input": "Where can I get my card at?", "expected": "order_physical_card"}
+{"id": "c14eef3e7cd2de55", "input": "Do you ship cards to where I live?", "expected": "order_physical_card"}
+{"id": "a2c015e37ec6e1db", "input": "I want to order a card. Where do you deliver to?", "expected": "order_physical_card"}
+{"id": "48a176831a78f784", "input": "For physical cards, do you charge?", "expected": "order_physical_card"}
+{"id": "8d3bf2e37a3e6b84", "input": "How much does it cost in fees to use your card?", "expected": "order_physical_card"}
+{"id": "1c634618d7ef5295", "input": "Can I be given a new passcode?", "expected": "passcode_forgotten"}
+{"id": "a57896852e8ca495", "input": "My passcode doesn't work", "expected": "passcode_forgotten"}
+{"id": "e702c0f74712fed0", "input": "I have forgotten my password.", "expected": "passcode_forgotten"}
+{"id": "4a9e98bc67160b6c", "input": "I lost my password", "expected": "passcode_forgotten"}
+{"id": "7a50faa38c38a11c", "input": "What should I do if I forgot my passcode?", "expected": "passcode_forgotten"}
+{"id": "4d6395a8df73c066", "input": "How long will this card payment stay pending?", "expected": "pending_card_payment"}
+{"id": "848e19d060b8fe89", "input": "How long does it take for a payment to go thru? I made one a few days ago and it has not been cleared yet.", "expected": "pending_card_payment"}
+{"id": "f1cc14801d091cdf", "input": "My card payment is showing pending.", "expected": "pending_card_payment"}
+{"id": "b10c3d811c03e0ad", "input": "I have a pending payment from stuff I bought this morning.", "expected": "pending_card_payment"}
+{"id": "b24e5aa354e9b1b1", "input": "what does pending mean?", "expected": "pending_card_payment"}
+{"id": "22c17d39745f8c93", "input": "I tried to take money from my card, but it didn't work. Later I saw that the transaction is still in progress. What's goign on?", "expected": "pending_cash_withdrawal"}
+{"id": "400a9414f5015c75", "input": "Is my pending cash withdrawal processed?", "expected": "pending_cash_withdrawal"}
+{"id": "3908be79a023a0af", "input": "I received cash from the ATM earlier, but this shows up as pending in the app.  I've got the cash already.  How can this be still pending?", "expected": "pending_cash_withdrawal"}
+{"id": "3184843af3fd3c96", "input": "I am still waiting for a cash withdrawal to show", "expected": "pending_cash_withdrawal"}
+{"id": "64b0612be881a162", "input": "My transaction is still showing that is pending from my cash withdrawal.", "expected": "pending_cash_withdrawal"}
+{"id": "0fd41fa6ed6ca756", "input": "Hi. I'm a new customer to your system and I think something isn't working right - or maybe it is. Maybe you can confirm. I tried to top up today (my first time ever) and it's been stuck at \"pending\" for over an hour now. Is it supposed to do this or is there something wrong in the system?", "expected": "pending_top_up"}
+{"id": "3c32cbad153752b4", "input": "So, I am a new customer and attempted to top up for the very first time today. It's already been pending for half an hour and doesn't seem to be working. I need to please get this fixed.", "expected": "pending_top_up"}
+{"id": "9f4e3b5806597126", "input": "Is there a reason my top up hasn't gone through", "expected": "pending_top_up"}
+{"id": "f88db1ae202a9456", "input": "My card was topped this morning but I can't see the funds. Why didn't it complete?", "expected": "pending_top_up"}
+{"id": "e8ee0a8d9e49b42d", "input": "What is going on? My top-up is still pending. I use your system all the time but now it is just showing as pending.", "expected": "pending_top_up"}
+{"id": "2be7d5bba0961e8f", "input": "I transferred money yesterday, but it still isn't available?", "expected": "pending_transfer"}
+{"id": "fcc23166b7e675fd", "input": "I am confused as to why my transfer could still be pending.", "expected": "pending_transfer"}
+{"id": "871d727527bf4cc6", "input": "Why is my transfer not done yet?", "expected": "pending_transfer"}
+{"id": "6f50fe4fcef221b9", "input": "I have a pending transfer", "expected": "pending_transfer"}
+{"id": "c1717f7eba2cbe9a", "input": "I had made a transfer but its still pending.", "expected": "pending_transfer"}
+{"id": "062f208fe593b812", "input": "I need help because I drunken blocked my card?", "expected": "pin_blocked"}
+{"id": "ee7742ee5bd3e4ab", "input": "Where can I view my PIN?", "expected": "pin_blocked"}
+{"id": "9ec28c33e5bd8789", "input": "How do I deal with a blocked PIN?", "expected": "pin_blocked"}
+{"id": "70c7facd9f907d37", "input": "How do I reset my PIN?", "expected": "pin_blocked"}
+{"id": "f82fd6fcd919da38", "input": "My PIN is blocked, what do I do?", "expected": "pin_blocked"}
+{"id": "72433055be79c5b3", "input": "How can my friend transfer money to me?", "expected": "receiving_money"}
+{"id": "362a4ace7df16786", "input": "Do you know if I can use this for my salary?", "expected": "receiving_money"}
+{"id": "51c68ccb792abec6", "input": "can I transfer my salary if it's in a different currency?", "expected": "receiving_money"}
+{"id": "3b77ace662a61a11", "input": "How do i get my salary in the account?", "expected": "receiving_money"}
+{"id": "3dbf5f12dc872d46", "input": "My salary is in GBP; how can I note this in the app?", "expected": "receiving_money"}
+{"id": "a8daa3e984483c1e", "input": "Can you cancel my purchase?", "expected": "request_refund"}
+{"id": "ae77b3519e064dfd", "input": "I want to reverse a purchase. Can I cancel it?", "expected": "request_refund"}
+{"id": "a90292e114a9e448", "input": "I want to get an item refunded", "expected": "request_refund"}
+{"id": "22c019463dbb40d7", "input": "I would appreciate it if I could get an item refunded", "expected": "request_refund"}
+{"id": "b0c7a800d68f525d", "input": "I need to do a refund", "expected": "request_refund"}
+{"id": "4eea7900e691bd10", "input": "My payment was reverted by the app", "expected": "reverted_card_payment?"}
+{"id": "ab5fc2e02a54f727", "input": "the app reverted my payment", "expected": "reverted_card_payment?"}
+{"id": "fc18e6f4151c9af8", "input": "My card payment was cancelled.", "expected": "reverted_card_payment?"}
+{"id": "1e9dcfc8be5fb3f3", "input": "Why was my payment reversed?", "expected": "reverted_card_payment?"}
+{"id": "95155a71f9221611", "input": "I made a payment but the app reverted the payment.", "expected": "reverted_card_payment?"}
+{"id": "50ace559c7ed60f1", "input": "What are the cards and currencies that are supported?", "expected": "supported_cards_and_currencies"}
+{"id": "c76100e94b3e2634", "input": "What currencies or cards do you support for topping up?", "expected": "supported_cards_and_currencies"}
+{"id": "56d32c2c9a2a6569", "input": "What is accepted in regards to cards and currencies?", "expected": "supported_cards_and_currencies"}
+{"id": "c18b6ec3d65c35c6", "input": "What cards and currencies will suffice?", "expected": "supported_cards_and_currencies"}
+{"id": "dcea2e2fc2603f47", "input": "Which cards do you guys support? I want to top up using my credit card.", "expected": "supported_cards_and_currencies"}
+{"id": "720296b4c7b33018", "input": "This company sucks! Can you delete my account?", "expected": "terminate_account"}
+{"id": "44b7a74b29ede73d", "input": "I am not satisfied with your company and would like to delete my accounts!", "expected": "terminate_account"}
+{"id": "2673a17952a5971d", "input": "What steps do I need to take to close my account?", "expected": "terminate_account"}
+{"id": "dcb1dd72744bb08b", "input": "The service of this company sucks, I need to terminate my account.", "expected": "terminate_account"}
+{"id": "85abbeeec01fca0e", "input": "Can you help me get rid of my account?", "expected": "terminate_account"}
+{"id": "a7eb69f7c2440d92", "input": "Will a transfer incur a fee?", "expected": "top_up_by_bank_transfer_charge"}
+{"id": "175adbb6e6b3cf01", "input": "How much is the fee for a SEPA transfer?", "expected": "top_up_by_bank_transfer_charge"}
+{"id": "c4454c234fbd8aee", "input": "Can you tell me what the transfer policy is?", "expected": "top_up_by_bank_transfer_charge"}
+{"id": "14dc2f12b33b8fce", "input": "I need to make a transfer, what will the fee be?", "expected": "top_up_by_bank_transfer_charge"}
+{"id": "88b5689759ad4c61", "input": "Do I have to pay for topping up by transfer?", "expected": "top_up_by_bank_transfer_charge"}
+{"id": "cfa1710bd1413dd0", "input": "Are there fees for top ups?", "expected": "top_up_by_card_charge"}
+{"id": "f9f53f87aae6837c", "input": "Will it cost anything to top up a US card?", "expected": "top_up_by_card_charge"}
+{"id": "2bcc53e8b2620f69", "input": "Any hidden fees associated with the international card if money is added?", "expected": "top_up_by_card_charge"}
+{"id": "49c84186800bc09a", "input": "What are the charges for US cards with top up.", "expected": "top_up_by_card_charge"}
+{"id": "574f359e0c8c7646", "input": "Does topping up my card have a fee?", "expected": "top_up_by_card_charge"}
+{"id": "9ac33ae29c872a97", "input": "Will you accept a cheque to top up my account?", "expected": "top_up_by_cash_or_cheque"}
+{"id": "ef2bef973c934149", "input": "How do I pay by check?", "expected": "top_up_by_cash_or_cheque"}
+{"id": "e093e6563cd8a5d9", "input": "Where do I locate topping up with cash.", "expected": "top_up_by_cash_or_cheque"}
+{"id": "a250cc449fa3ccd8", "input": "I'm looking for the cash deposit top up option but can't find it. Can you help me?", "expected": "top_up_by_cash_or_cheque"}
+{"id": "2dcac378af60128c", "input": "Why can't I top up with a cheque?", "expected": "top_up_by_cash_or_cheque"}
+{"id": "45b95edb6d75d414", "input": "Why can't I top up?", "expected": "top_up_failed"}
+{"id": "a9daff198185169e", "input": "Why would my topup not go through?", "expected": "top_up_failed"}
+{"id": "204e7768eda9d08b", "input": "How did my top-up fail?", "expected": "top_up_failed"}
+{"id": "c2043e1bb4adc974", "input": "I need to know why my credit card was declined for top up? What is the deal here and why did it not go through?", "expected": "top_up_failed"}
+{"id": "732aed59860a2313", "input": "My funding to my card didn't go through.", "expected": "top_up_failed"}
+{"id": "cf4bd4c31bcd42eb", "input": "When I top up what are the amoutn limits.", "expected": "top_up_limits"}
+{"id": "40804c4ee8ac41dd", "input": "What is the top-ups limit?", "expected": "top_up_limits"}
+{"id": "7c6e0e9904553d2c", "input": "I want to know if there is a maximum I can top up.", "expected": "top_up_limits"}
+{"id": "41a0cc1b8562e3ad", "input": "What is the limit to a top-up?", "expected": "top_up_limits"}
+{"id": "94793bf3e64d8a74", "input": "how much can i top up?", "expected": "top_up_limits"}
+{"id": "7b3ffd0d88e88d8d", "input": "Im very upset as my top-up was canceled and I have no idea why.", "expected": "top_up_reverted"}
+{"id": "46becb78d7732ef0", "input": "I topped up but the app reverted it", "expected": "top_up_reverted"}
+{"id": "84ca848c32df1221", "input": "The app reverted what I topped up.", "expected": "top_up_reverted"}
+{"id": "d00f43625399b666", "input": "I'd like to know why my top-up was canceled please.", "expected": "top_up_reverted"}
+{"id": "15a938e2d580c61b", "input": "On my last transaction it seem that my top-up was not successful.", "expected": "top_up_reverted"}
+{"id": "b8bfb13ca8407044", "input": "Can friends add to my account", "expected": "topping_up_by_card"}
+{"id": "e64684ee67f7161a", "input": "Who else can top up my account", "expected": "topping_up_by_card"}
+{"id": "42b6b915571a8847", "input": "How do my friends top up my account", "expected": "topping_up_by_card"}
+{"id": "23b4fb4ced101b7c", "input": "Why can't I see the top-up amount I just added to my account?", "expected": "topping_up_by_card"}
+{"id": "3472631981fddc35", "input": "show me how to top up with my card", "expected": "topping_up_by_card"}
+{"id": "765b98e926973aa5", "input": "I didn't buy this twice", "expected": "transaction_charged_twice"}
+{"id": "604f0c901beb5354", "input": "Why would I be charged more than once for the same transaction?", "expected": "transaction_charged_twice"}
+{"id": "436c43f42a975842", "input": "Transactions on my card look really weird. I've been charged twice for a couple things this week! Please check this and return the double charged ones.", "expected": "transaction_charged_twice"}
+{"id": "2614390997a10eb4", "input": "What are my remedies if I think I was charged twice for the same expense?", "expected": "transaction_charged_twice"}
+{"id": "85f79d98d7f669db", "input": "Why is there more then one charge on my card I only paid for one not twice how can I fix this?", "expected": "transaction_charged_twice"}
+{"id": "fc65f5df8c1a6cae", "input": "There was an extra charge when I made a transfer.", "expected": "transfer_fee_charged"}
+{"id": "cae44ac03eb15b7f", "input": "What extra charges are there?", "expected": "transfer_fee_charged"}
+{"id": "ab26aa8049ce8d6f", "input": "I thought transfers were free, why was I charged a fee?", "expected": "transfer_fee_charged"}
+{"id": "912b28fa33f64b54", "input": "Why was a charged just for transferring?", "expected": "transfer_fee_charged"}
+{"id": "c15dd0104b32835b", "input": "Why am I seeing a transfer fee?", "expected": "transfer_fee_charged"}
+{"id": "eed41b5955b1b292", "input": "How do I transfer money to my account?", "expected": "transfer_into_account"}
+{"id": "c1fa23cba54b775d", "input": "I'm out of money, can I add money with my bank?", "expected": "transfer_into_account"}
+{"id": "7a6560861dc2fb5a", "input": "How can I transfer funds from my bank to my top up account?", "expected": "transfer_into_account"}
+{"id": "f25d936a11b70b37", "input": "What methods can I use to add money to my account?", "expected": "transfer_into_account"}
+{"id": "0cedce877aab4e4f", "input": "I want to top my account by using a bank transfer. How would that work?", "expected": "transfer_into_account"}
+{"id": "4149b00a0600574c", "input": "How long does it take for a transfer to get to a recipient?", "expected": "transfer_not_received_by_recipient"}
+{"id": "a09e7d08aac82ecb", "input": "How long will it take for my transaction to be completed?", "expected": "transfer_not_received_by_recipient"}
+{"id": "3f74ba2891beefcd", "input": "The transfer I did hasn't arrived", "expected": "transfer_not_received_by_recipient"}
+{"id": "40abd40b3fc2cbcc", "input": "How long does it take for transfers to finish?  I sent funds to my pal, and she says that she has not gotten anything.", "expected": "transfer_not_received_by_recipient"}
+{"id": "1c2f1b8056c2de3a", "input": "Im waiting for my transaction to go through.", "expected": "transfer_not_received_by_recipient"}
+{"id": "55cb16f311f6ea88", "input": "how long dies it take for transfers to reflect on my balance", "expected": "transfer_timing"}
+{"id": "18711fd607d403a8", "input": "Do transfers from Europe take longer?", "expected": "transfer_timing"}
+{"id": "3bdd2965b8fa3e14", "input": "If I started the Bank transfer from Europe, how long will the process take to complete?", "expected": "transfer_timing"}
+{"id": "8311df06473e5913", "input": "How long until the money is in my account?", "expected": "transfer_timing"}
+{"id": "6fdd4c43680074ed", "input": "How long do i have to wait for a transfer to reach my account?", "expected": "transfer_timing"}
+{"id": "0c8d8b61955d0fa9", "input": "Why doesn't the app believe I am who I say I am?", "expected": "unable_to_verify_identity"}
+{"id": "c5edc01be114324f", "input": "The app failed to verify my identity.", "expected": "unable_to_verify_identity"}
+{"id": "ed03b50e3902ed60", "input": "I can't verify my identity.", "expected": "unable_to_verify_identity"}
+{"id": "57ab74d5c9748e8f", "input": "I am having issues with identity verification", "expected": "unable_to_verify_identity"}
+{"id": "9a316768d1634f4c", "input": "The app doesn't recognize me.", "expected": "unable_to_verify_identity"}
+{"id": "6349577b8c1ea4ef", "input": "When getting my ID checked, what are the steps involved?", "expected": "verify_my_identity"}
+{"id": "38bd2516a8a9199a", "input": "What all am I required to show for the identity check?", "expected": "verify_my_identity"}
+{"id": "3083332bd826197a", "input": "What do I need to verify my identity", "expected": "verify_my_identity"}
+{"id": "e731ee1e31eb095c", "input": "How can I verify my indentity?", "expected": "verify_my_identity"}
+{"id": "db6333cb8ff14550", "input": "I need some help with identity verification.", "expected": "verify_my_identity"}
+{"id": "89e0ae723ff2c4e3", "input": "How can I check the source of my fund?", "expected": "verify_source_of_funds"}
+{"id": "f9614584c90129d7", "input": "Where does all this money come from though?", "expected": "verify_source_of_funds"}
+{"id": "4e2bccd87dcdcb96", "input": "How can I lookup where funds came from?", "expected": "verify_source_of_funds"}
+{"id": "6017e449fbf5f1e6", "input": "I would like to see the source of my money.", "expected": "verify_source_of_funds"}
+{"id": "818742dde7fbcba3", "input": "Where can I find the source of my available money?", "expected": "verify_source_of_funds"}
+{"id": "8bf5afa7bbeefc90", "input": "How can I find the top-up verification code?", "expected": "verify_top_up"}
+{"id": "4b87b09702eec8bc", "input": "Is it necessary to verify my top up?", "expected": "verify_top_up"}
+{"id": "ae9712cfded88598", "input": "What is the verification code on a top-up?", "expected": "verify_top_up"}
+{"id": "b1f3e3a0fe818819", "input": "Can you give me information about verification code?", "expected": "verify_top_up"}
+{"id": "2fbf7ffcd20e2f71", "input": "Why do I have to verify the top-up?", "expected": "verify_top_up"}
+{"id": "7d6efa4e296774ff", "input": "Can I make multiple online transactions with my virtual card?", "expected": "virtual_card_not_working"}
+{"id": "8b296c3cea164011", "input": "What do I do if my virtual card won't work.", "expected": "virtual_card_not_working"}
+{"id": "0042319bc14805c4", "input": "I cannot get my virtual card to work.", "expected": "virtual_card_not_working"}
+{"id": "e82e723a6dc51211", "input": "How can I fix a problem where my virtual card is rejected?", "expected": "virtual_card_not_working"}
+{"id": "83c190358eaa7451", "input": "Why is my disposable virtual card being denied?", "expected": "virtual_card_not_working"}
+{"id": "c57b1f7fccc041be", "input": "Do you guys accept mastercard or visa?", "expected": "visa_or_mastercard"}
+{"id": "d81aae71adb43182", "input": "Do you guys accept Visa or Mastercard?", "expected": "visa_or_mastercard"}
+{"id": "b65c4c1d976273d1", "input": "I would like to apply for a visa card.", "expected": "visa_or_mastercard"}
+{"id": "e84a1bfb45261dd2", "input": "Can you give me a visa?", "expected": "visa_or_mastercard"}
+{"id": "85567d46f17237d6", "input": "I want to get Visa and Mastercard", "expected": "visa_or_mastercard"}
+{"id": "3bb676acb1077453", "input": "Why is identity verification mandatory?", "expected": "why_verify_identity"}
+{"id": "3a1ce8c3965a1bce", "input": "Why am I required to verify my identity?", "expected": "why_verify_identity"}
+{"id": "9be91fa86b81401f", "input": "Why do you need so much information to verify my identity?", "expected": "why_verify_identity"}
+{"id": "57b473bdeeb51db2", "input": "How come you need to know my identity?", "expected": "why_verify_identity"}
+{"id": "1b6f490a6fede799", "input": "What is the point of an identity check?", "expected": "why_verify_identity"}
+{"id": "ac9da0e262e7bd20", "input": "Why did I not get my cash back after I withdrew?", "expected": "wrong_amount_of_cash_received"}
+{"id": "57ede33aeb81a09a", "input": "The ATM didn't give me the the withdraw amount requested.", "expected": "wrong_amount_of_cash_received"}
+{"id": "22d3ab098ca9574a", "input": "What do I do if the ATM didn't give me the correct amount I withdrew? I pulled out 30 pounds and the ATM gave me 10 pounds.", "expected": "wrong_amount_of_cash_received"}
+{"id": "41e976e51cc86a3f", "input": "I tried to get $100 but I just got $20", "expected": "wrong_amount_of_cash_received"}
+{"id": "492b9a6ca039ac94", "input": "Why did I get less money than I asked for?", "expected": "wrong_amount_of_cash_received"}
+{"id": "6af75a33809dcc0e", "input": "I used the ATM machine to get money out for Holiday shopping and saw the outrageous charges. Why is that? I would not have used the ATM if I had known!", "expected": "wrong_exchange_rate_for_cash_withdrawal"}
+{"id": "93c7bd72f11a9d06", "input": "My ecchange rate was wrong for a cash transaction.", "expected": "wrong_exchange_rate_for_cash_withdrawal"}
+{"id": "e64bdbed3c727fb6", "input": "I attempted to get money using a foreign currency at an ATM but the rate was highly inaccurate!", "expected": "wrong_exchange_rate_for_cash_withdrawal"}
+{"id": "69ca393912cdabf8", "input": "Can I make a withdraw if I am out of country from with out any fees at an ATM?", "expected": "wrong_exchange_rate_for_cash_withdrawal"}
+{"id": "55978e69f61ef230", "input": "I made a withdraw from the ATM this past holiday and it seems like a was charged too much. If I would have   known about these charges I wouldn't have made a withdraw.", "expected": "wrong_exchange_rate_for_cash_withdrawal"}

@@ -2,6 +2,7 @@ import json
 
 from app.core import estimated_cost, get_cache, init_db, request_hash, set_cache, choose_model, usage_summary, write_usage
 from app.lab import delete_experiment, estimate_cost, get_experiment, get_policy, result_summary, save_experiment, score_output, set_policy
+from app.statistics import paired_bootstrap_delta, wilson_interval
 
 
 def test_provider_cost_estimate_uses_current_configured_rate():
@@ -36,12 +37,22 @@ def test_recommendation_requires_quality_retention_and_no_provider_errors():
         {"id":"cheap","name":"Cheap","model":"gpt-6-luna","system_prompt":"same","user_template":"{{input}}","scorer":"exact"},
     ]
     rows=[]
-    for variant_id, score, cost, error in [("base",1,.01,False),("base",1,.01,False),("cheap",1,.002,False),("cheap",1,.002,False)]:
-        rows.append({"variant_id":variant_id,"score":score,"estimated_total_cost_usd":cost,"latency_ms":30,"status":"error" if error else "ok"})
+    for variant_id, case_id, score, cost, error in [("base","a",1,.01,False),("base","b",1,.01,False),("cheap","a",1,.002,False),("cheap","b",1,.002,False)]:
+        rows.append({"variant_id":variant_id,"case_id":case_id,"score":score,"estimated_total_cost_usd":cost,"latency_ms":30,"status":"error" if error else "ok"})
     report=result_summary(rows,variants,"base")
     assert report["recommendation"] == "cheap"
     rows[-1]["status"]="error"
     assert result_summary(rows,variants,"base")["recommendation"] == "base"
+
+
+def test_confidence_intervals_are_deterministic_and_pair_cases():
+    assert wilson_interval(90, 100)[0] < .9 < wilson_interval(90, 100)[1]
+    baseline = [True, False, True, False] * 10
+    candidate = [True, False, True, False] * 10
+    ids = [f"case-{i}" for i in range(len(baseline))]
+    interval = paired_bootstrap_delta(baseline, candidate, ids)
+    assert interval == (0.0, 0.0)
+    assert paired_bootstrap_delta(baseline[:-1], candidate, ids) is None
 
 
 def test_local_experiment_history_and_promoted_policy_lifecycle(tmp_path):

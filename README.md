@@ -1,23 +1,27 @@
 # LLM Cost Cutter
 
-**Find the cheapest model and prompt combination that still does your task well.**
+[![CI](https://github.com/HariHaran9597/llm-cost-cutter/actions/workflows/ci.yml/badge.svg)](https://github.com/HariHaran9597/llm-cost-cutter/actions/workflows/ci.yml) [![GitHub Pages](https://github.com/HariHaran9597/llm-cost-cutter/actions/workflows/pages.yml/badge.svg)](https://github.com/HariHaran9597/llm-cost-cutter/actions/workflows/pages.yml)
 
-LLM Cost Cutter is a local model and prompt evaluation workbench for developers and small teams. Give it examples from one real workload, run the same inputs through candidate model/prompt combinations, inspect the outputs, quality scores, provider-reported tokens, actual measured latency, and estimated API charges. Promote a passing candidate into a task-specific policy for the compatible gateway.
+**Compare model and prompt choices on the same labeled workload.** LLM Cost Cutter answers a concrete engineering question: *Can a cheaper model or prompt handle this task with an acceptable quality loss, and what will it cost at my traffic volume?*
 
-The public Pages site explains the workflow. Live experiments run on your machine so your provider key and evaluation data stay under your control.
+The hosted [project page](https://hariharan9597.github.io/llm-cost-cutter/) includes a token-cost calculator and the reproducible Banking77 sample. Live comparisons run on your machine using your own API keys. The page is static; it never receives provider keys or proxies calls.
 
-## How you use it
+## What a user does
 
-1. Pick one task your product sends to an LLM, such as support-ticket classification, structured extraction, or answer drafting.
-2. Prepare 5–10 representative inputs with expected answers. Use sanitized examples; the local database stores your inputs and model responses so you can inspect failures.
-3. Add candidate variants. Each variant has a model, system prompt, and user template. Compare model changes with the prompt held constant, prompt changes with the model held constant, or compare both together.
-4. Choose a scorer: normalized exact match, required-text containment, or an LLM judge with your rubric and a separately visible judge cost. Exact/contains scores are reproducible; judge scores are subjective and should be spot-checked.
-5. Review the side-by-side score, cost per case, p50/p95 measured latency, errors, and every output. The recommendation is the lowest-cost variant within five quality points of the baseline, provided it has no provider errors. It falls back to the baseline when none qualify.
-6. Promote the candidate. The local gateway can then apply that evaluated model and prompt when the caller supplies the matching `x-costcutter-task` header.
+1. Choose a workload and prepare examples with expected labels or answers. The included Banking77 sample is a stratified 385-case slice of its official held-out test set: five examples from each of 77 intents.
+2. Pick model and prompt variants. Compare GPT, Claude, and Kimi in the same run, or hold the model constant and compare prompt versions.
+3. Enter a BYOK key for each provider needed. Keys are used for that request only, are not saved in browser storage or SQLite, and are cleared from the form after the run.
+4. Set a spend cap, then run. The app records provider-reported token counts where available, measured request latency, errors, and exact-match output scores. Cost uses the dated rate card and reported usage; it is an estimate of provider charges, not an invoice.
+5. Inspect every case and compare accuracy with 95% Wilson intervals, macro-F1, cost per 1,000 requests, and p50/p95 latency. Candidate-versus-baseline accuracy differences use a paired bootstrap confidence interval over the same case IDs.
+6. Optionally promote a qualifying candidate into a task-specific gateway policy. The policy recommendation uses a 3 percentage-point non-inferiority margin: the lower bound of the paired 95% interval must be above -3 points, the run must have no provider errors, and all cases must be scored. A small run will often be inconclusive; add more representative cases instead of treating a noisy point estimate as proof.
 
-**The product solves a concrete decision:** “For this workload and these examples, which tested model/prompt gives acceptable answers at the lowest observed cost and latency?” It does not claim that one model is universally better or promise savings before you test your workload.
+## Included public benchmark
 
-## Start locally
+The reproducible benchmark uses the original PolyAI BANKING77 official test split (3,080 rows, 77 intents), pinned to source revision `9d081458ff52e53cf7e848f414e6e9344e4e6696`. The committed sample is deterministically drawn with seed `20261030`, five examples per intent (385 total). The source file SHA-256 is verified before any run. Dataset license: CC BY 4.0. See the [dataset card](https://huggingface.co/datasets/PolyAI/banking77) and [original source](https://github.com/PolyAI-LDN/task-specific-datasets).
+
+The benchmark compares GPT-6 Luna, Claude Haiku 5.5, and Kimi K2.6 with one fixed zero-shot prompt and exact intent-label scoring. Provider errors count as incorrect in the accuracy denominator; p95 latency is over successful calls and labeled accordingly. The runner produces a dated result bundle with individual outputs and protocol metadata. A public headline is published only after real calls complete; no model result is inferred from list prices or mocked tests.
+
+### Run it
 
 Requirements: Python 3.11+.
 
@@ -25,52 +29,82 @@ Requirements: Python 3.11+.
 py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
+```
+
+First inspect the zero-call cost estimate:
+
+```powershell
+python -m benchmarks.run_banking77
+```
+
+To run it, put provider keys in environment variables (or in an ignored `.env` loaded by the app):
+
+```powershell
+$env:OPENAI_API_KEY = "..."
+$env:ANTHROPIC_API_KEY = "..."
+$env:MOONSHOT_API_KEY = "..."
+python -m benchmarks.run_banking77 --execute --max-budget-usd 1.00
+```
+
+The CLI requires an explicit cap at or above its preflight estimate. The estimate is approximate, so configure billing limits at each provider too. Results are written under the ignored `benchmark-results/` directory. To publish a result, review the bundle and run:
+
+```powershell
+python -m benchmarks.publish_result benchmark-results/<run-id>/result.json
+```
+
+That writes a static artifact for the Pages viewer. The checked-in project currently includes no benchmark score until the above live run succeeds.
+
+## Start the local BYOK workbench
+
+```powershell
 Copy-Item .env.example .env
 ```
 
-Set `GATEWAY_API_TOKEN` to a random local secret. Set `UPSTREAM_API_KEY` (or `OPENAI_API_KEY`) in `.env`, set `LLMCUTTER_DEMO_MODE=false`, then run:
+Set a random `GATEWAY_API_TOKEN` and set `LLMCUTTER_DEMO_MODE=false` in `.env`, then start the app:
 
 ```powershell
 uvicorn app.main:app --reload
 ```
 
-Open `http://127.0.0.1:8000`, enter the gateway token in the page, and configure a comparison. The provider key stays on the server. The app never sends it to the browser.
+Open `http://127.0.0.1:8000`. Enter the gateway token, then enter only the provider keys used in the current experiment. The form clears BYOK fields after the request. Keys are sent to the local server over localhost and passed to their selected provider; do not expose the local server to an untrusted network. The public static site cannot execute live runs.
 
-If you only want to inspect the product page, GitHub Pages is [here](https://hariharan9597.github.io/llm-cost-cutter/). The hosted page cannot run experiments because it has no access to your local provider key or database.
+For gateway operation beyond one-time BYOK experiments, put provider keys in server environment variables: `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`, and/or `MOONSHOT_API_KEY`. Gateway calls and saved experiment data remain on your machine.
 
-## Evaluation details
+## Cost model and pricing provenance
 
-- An experiment runs the full Cartesian product of 1–10 cases and 2–4 variants. It is limited to 48 provider calls per run.
-- Before execution, the server estimates token cost from configured model prices and requested output-token limits. The run is rejected if that estimate exceeds the user's selected budget. Token estimates are approximate, so this is not a hard billing cap; actual charges can vary by tokenizer, cached tokens, model behavior, and provider pricing. Set provider-side spending limits too.
-- Every candidate sees the same cases. Temperature is fixed at zero. Provider usage is used when returned; otherwise a clearly marked token estimate is recorded.
-- The judge mode adds a judge call for every candidate/case. Judge costs count toward the run total; failed or malformed judge responses require manual review.
-- The recommendation uses the first variant as baseline and requires quality within 5 percentage points plus zero provider errors. Inspect the individual outputs before promoting any policy.
-- Runs, inputs, prompts, expected answers, and outputs are stored locally in SQLite for review. Delete a run in the UI to erase its experiment record. The gateway's exact cache separately stores responses for reuse.
+The calculator takes input/output token counts and computes a cost for each model with the same counts. This isolates price differences; it does **not** claim the models tokenize the same text identically. Live runs use provider-reported token usage where returned, then apply the configured list rates. Account-specific discounts, batch tiers, regional processing, long-context tiers, caching, and taxes may change actual billing.
 
-Model prices are editable in `config/pricing.json`, checked 2026-10-30 against [OpenAI API pricing](https://developers.openai.com/api/docs/pricing/). The defaults are GPT-6 Luna, GPT-6.1 Terra, GPT-6.1 Sol, and GPT-6 Astra. Only choose models available to your provider account. Update rates before budgeting; prices vary by provider and service tier.
+Rates are USD per 1 million tokens, checked 2026-10-30, and editable in [`config/pricing.json`](config/pricing.json):
 
-## Gateway integration
+- OpenAI GPT-6 family: [official API pricing](https://developers.openai.com/api/docs/pricing/)
+- Claude Haiku 5.5 and Sonnet 5.5: [Anthropic model pricing](https://docs.anthropic.com/en/docs/about-claude/pricing) and [model IDs](https://platform.claude.com/docs/en/models/haiku-5-5/overview)
+- Kimi K2.6 and K3: [Moonshot/Kimi API platform](https://platform.kimi.ai/)
 
-`POST /v1/chat/completions` accepts the supported OpenAI-compatible request subset and requires `Authorization: Bearer <GATEWAY_API_TOKEN>`. A promoted policy is selected with `x-costcutter-task: <task-type>`. Without a promoted policy, a conservative fallback routes only recognizable bounded tasks to the configured cheap model and unknown/complex requests to the baseline.
+Refresh provider IDs and prices before using the calculator for a purchasing decision. Provider model access is tied to each API account.
 
-Supported fields: `messages` with system/user roles, `temperature`, and `max_tokens` (1–2048). Unsupported request fields are rejected. Streaming, tools, and multi-turn agent flows are not supported.
+## Product boundaries
 
-## Business metrics to report
-
-For a workload-specific result, report the dataset name/version and size, scorer and rubric, baseline, candidate, quality denominator, provider and date-stamped rates, total tokens, cost per request, p50/p95 latency, and failure count. Compare only runs with the same cases and record the prompt/model variant IDs. Do not use the former illustrative replay numbers as results; they have been removed.
-
-Resume bullet after a real run: “Compared **[N]** representative **[task]** examples across **[models/prompts]** using **[scorer]**; selected **[variant]** at **[quality]** with **[measured cost change]** and **[p95 latency]**, then promoted it to a task-specific gateway policy.”
-
-## Security and privacy
-
-- Keep provider keys in local environment variables. `.env` is ignored by Git.
-- The gateway token is required for runs, experiment history, policy promotion, and live chat calls.
-- The app stores prompts and responses locally by design so users can inspect failures. Avoid sensitive or identifying data unless your provider and local retention settings allow it.
-- The public GitHub Pages deployment is static and contains no live proxy or user run data.
-- Use localhost or a trusted private network. Before public hosting, add production identity, TLS, secret management, distributed abuse controls, durable database protection, and monitoring.
+- The app is an evaluation and cost decision tool, not a universal model leaderboard. Results apply to the published dataset/prompt or the user's own test set.
+- It uses 0-temperature calls where the API supports it. Provider/model changes, prompt changes, and dataset version changes create a new experimental condition.
+- The paired bootstrap and Wilson intervals quantify sampling uncertainty for the measured cases. They do not establish production reliability or guarantee future savings.
+- Exact cache and deterministic routing are separate gateway features. Cache hit benefits must be measured on the caller's workload; this benchmark does not claim cache savings.
+- Static Pages publishes the reviewed benchmark artifact only. No public model proxy, user account, user run, or secret exists on Pages.
 
 ## Development
 
 ```powershell
 python -m pytest -q
+node --check web/app.js
 ```
+
+CI runs the test suite on pushes and pull requests. The Pages workflow deploys the static UI and reviewed data artifacts from `web/`.
+
+## Resume claim
+
+Use a result only after a successful, reviewed live run. Keep the denominator, confidence interval, exact data split, prompt, provider/model IDs, price date, and failed calls attached to the claim. A concise format is:
+
+> Evaluated **[models]** on **[N]** held-out **[task]** cases; **[model]** achieved **[accuracy, 95% CI]** at **[$/1,000 requests]** and **[p95 ms]**, with **[error count]** failed calls, using **[dataset version and prompt]**.
+
+## License
+
+Application code: MIT. BANKING77 data remains subject to its CC BY 4.0 license and attribution to PolyAI and Casanueva et al. (2020).

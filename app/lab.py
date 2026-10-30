@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from typing import Any
 
 from app.core import load_prices
+from app.statistics import paired_bootstrap_delta, wilson_interval
 
 
 def score_output(scorer: str, expected: str, actual: str) -> tuple[float | None, str]:
@@ -36,18 +37,32 @@ def result_summary(rows: list[dict[str, Any]], variants: list[dict[str, Any]], b
         passes = sum(score >= (4 if variant.get("scorer") == "judge" else 1) for score in scored)
         cost = sum(row["estimated_total_cost_usd"] for row in group)
         base = {"id": variant["id"], "name": variant["name"], "model": variant["model"], "system_prompt": variant["system_prompt"], "user_template": variant["user_template"]}
-        base.update({"cases": len(group), "scored_cases": len(scored), "passed": passes, "quality_rate": passes / len(group) if group else None, "mean_judge_score": round(sum(scored) / len(scored), 2) if scored and variant.get("scorer") == "judge" else None, "estimated_total_cost_usd": round(cost, 9), "estimated_cost_per_case_usd": round(cost / len(group), 9) if group else 0, "p50_latency_ms": _percentile([row["latency_ms"] for row in group], .5), "p95_latency_ms": _percentile([row["latency_ms"] for row in group], .95), "errors": sum(row["status"] != "ok" for row in group)})
+        ci = wilson_interval(passes, len(group)) if group and scored and variant.get("scorer") != "judge" else None
+        base.update({"cases": len(group), "scored_cases": len(scored), "passed": passes, "quality_rate": passes / len(group) if group and (scored or any(row["status"] != "ok" for row in group)) else None, "quality_ci_95": list(ci) if ci else None, "mean_judge_score": round(sum(scored) / len(scored), 2) if scored and variant.get("scorer") == "judge" else None, "estimated_total_cost_usd": round(cost, 9), "estimated_cost_per_case_usd": round(cost / len(group), 9) if group else 0, "estimated_cost_per_1000_requests_usd": round(cost / len(group) * 1000, 6) if group else 0, "p50_latency_ms": _percentile([row["latency_ms"] for row in group], .5), "p95_latency_ms": _percentile([row["latency_ms"] for row in group], .95), "errors": sum(row["status"] != "ok" for row in group)})
         summaries.append(base)
     baseline = next((s for s in summaries if s["id"] == baseline_id), summaries[0] if summaries else None)
+    baseline_rows = {row["case_id"]: row for row in grouped.get(baseline_id, []) if row.get("score") is not None and row["status"] == "ok"}
     for summary in summaries:
         if baseline and baseline["estimated_total_cost_usd"]:
             summary["savings_vs_baseline_rate"] = round(1 - summary["estimated_total_cost_usd"] / baseline["estimated_total_cost_usd"], 4)
         else:
             summary["savings_vs_baseline_rate"] = 0
         summary["quality_delta_vs_baseline"] = round(summary["quality_rate"] - baseline["quality_rate"], 4) if baseline and summary["quality_rate"] is not None and baseline["quality_rate"] is not None else None
-    eligible = [s for s in summaries if s["quality_rate"] is not None and baseline and s["quality_rate"] >= baseline["quality_rate"] - .05 and s["errors"] == 0 and s["scored_cases"] == s["cases"]]
+        candidate_rows = {row["case_id"]: row for row in grouped.get(summary["id"], []) if row.get("score") is not None and row["status"] == "ok"}
+        shared_ids = sorted(set(baseline_rows) & set(candidate_rows))
+        delta_ci = paired_bootstrap_delta(
+            [baseline_rows[case_id]["score"] >= 1 for case_id in shared_ids],
+            [candidate_rows[case_id]["score"] >= 1 for case_id in shared_ids],
+            shared_ids,
+        ) if shared_ids and variant_scorer(variants, summary["id"]) != "judge" else None
+        summary["paired_quality_delta_ci_95"] = list(delta_ci) if delta_ci else None
+    eligible = [s for s in summaries if s["quality_rate"] is not None and baseline and s["errors"] == 0 and s["scored_cases"] == s["cases"] and s["paired_quality_delta_ci_95"] and s["paired_quality_delta_ci_95"][0] >= -.03]
     recommendation = min(eligible, key=lambda s: s["estimated_cost_per_case_usd"], default=baseline)
-    return {"baseline_variant_id": baseline["id"] if baseline else None, "variants": summaries, "recommendation": recommendation["id"] if recommendation else None, "recommendation_rule": "lowest cost per case among variants within 5 percentage points of baseline quality and with no provider errors; otherwise keep baseline", "actual_latency": True}
+    return {"baseline_variant_id": baseline["id"] if baseline else None, "variants": summaries, "recommendation": recommendation["id"] if recommendation else None, "recommendation_rule": "lowest cost per request among candidates whose paired bootstrap 95% CI lower bound is no worse than 3 percentage points versus baseline and with no provider errors; otherwise keep baseline", "confidence_method": "Wilson 95% interval for accuracy; paired bootstrap percentile 95% interval for accuracy difference, 10,000 deterministic resamples", "non_inferiority_margin": 0.03, "actual_latency": True}
+
+
+def variant_scorer(variants: list[dict[str, Any]], variant_id: str) -> str:
+    return next((variant.get("scorer", "exact") for variant in variants if variant["id"] == variant_id), "exact")
 
 
 def _percentile(values: list[float], p: float) -> float:

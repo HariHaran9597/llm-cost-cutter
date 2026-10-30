@@ -3,10 +3,19 @@
   "checked_on": "2026-10-30",
   "currency": "USD",
   "unit": "per 1M tokens",
+  "providers": {
+    "openai": {"base_url": "https://api.openai.com/v1", "source": "https://developers.openai.com/api/docs/pricing/"},
+    "anthropic": {"base_url": "https://api.anthropic.com", "source": "https://docs.anthropic.com/en/docs/about-claude/pricing"},
+    "moonshot": {"base_url": "https://api.moonshot.ai/v1", "source": "https://platform.kimi.ai/"}
+  },
   "models": {
-    "gpt-6-luna": {"input": 0.10, "cached_input": 0.01, "output": 0.50},
-    "gpt-6.1-terra": {"input": 1.00, "cached_input": 0.05, "output": 5.00},
-    "gpt-6.1-sol": {"input": 2.00, "cached_input": 0.10, "output": 10.00},
-    "gpt-6-astra": {"input": 10.00, "cached_input": 1.00, "output": 50.00}
+    "gpt-6-luna": {"provider": "openai", "input": 0.10, "cached_input": 0.01, "output": 0.50},
+    "gpt-6.1-terra": {"provider": "openai", "input": 1.00, "cached_input": 0.05, "output": 5.00},
+    "gpt-6.1-sol": {"provider": "openai", "input": 2.00, "cached_input": 0.10, "output": 10.00},
+    "gpt-6-astra": {"provider": "openai", "input": 10.00, "cached_input": 1.00, "output": 50.00},
+    "claude-haiku-5-5": {"provider": "anthropic", "provider_model": "claude-haiku-5-5", "input": 0.10, "cached_input": 0.01, "output": 0.50},
+    "claude-sonnet-5-5": {"provider": "anthropic", "provider_model": "claude-sonnet-5-5", "input": 2.00, "cached_input": 0.10, "output": 10.00},
+    "kimi-k2.6": {"provider": "moonshot", "provider_model": "kimi-k2.6", "input": 0.95, "cached_input": 0.16, "output": 4.00},
+    "kimi-k3": {"provider": "moonshot", "provider_model": "kimi-k3", "input": 3.00, "cached_input": 0.30, "output": 15.00}
   }
 }

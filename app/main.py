@@ -7,6 +7,7 @@ import time
 import uuid
 import re
 import sqlite3
+import os
 from contextlib import asynccontextmanager
 from collections import deque
 from datetime import datetime, timezone
@@ -17,7 +18,7 @@ import httpx
 from fastapi import FastAPI, Header, HTTPException, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, SecretStr, field_validator, model_validator
 from dotenv import load_dotenv
 
 from app.core import Settings, daily_spend, get_cache, init_db, request_hash, choose_model, set_cache, token_estimate, usage_summary, write_usage, load_prices
@@ -76,13 +77,22 @@ class ExperimentRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
     name: str = Field(min_length=1, max_length=120)
     task_type: str = Field(min_length=2, max_length=40, pattern=r"^[a-z0-9][a-z0-9_-]+$")
-    cases: list[EvalCase] = Field(min_length=1, max_length=10)
+    cases: list[EvalCase] = Field(min_length=1, max_length=2000)
     variants: list[EvalVariant] = Field(min_length=2, max_length=4)
     scorer: Literal["exact", "contains", "judge"] = "exact"
     judge_model: str | None = None
     rubric: str | None = Field(default=None, max_length=2000)
     max_output_tokens: int = Field(default=128, ge=16, le=512)
     max_budget_usd: float = Field(default=0.10, gt=0, le=5)
+    provider_api_keys: dict[str, SecretStr] = Field(default_factory=dict, exclude=True)
+
+    @field_validator("provider_api_keys")
+    @classmethod
+    def validate_provider_keys(cls, value):
+        allowed = {"openai", "anthropic", "moonshot"}
+        if len(value) > len(allowed) or any(provider not in allowed or len(key.get_secret_value()) > 500 for provider, key in value.items()):
+            raise ValueError("provider key settings are invalid")
+        return value
 
     @model_validator(mode="after")
     def validate_experiment(self):
@@ -151,7 +161,7 @@ async def api_usage(authorization: str | None = Header(default=None)):
 @app.get("/api/config")
 def api_config():
     prices = load_prices()
-    return {"models": prices["models"], "price_source": prices["source"], "prices_checked_on": prices["checked_on"], "live_enabled": bool(settings.upstream_api_key) and not settings.demo_mode, "demo_mode": settings.demo_mode, "judge_model": settings.judge_model}
+    return {"models": prices["models"], "providers": prices["providers"], "price_source": prices["source"], "prices_checked_on": prices["checked_on"], "live_enabled": not settings.demo_mode, "demo_mode": settings.demo_mode, "judge_model": settings.judge_model}
 
 
 @app.get("/api/models/available")
@@ -194,17 +204,40 @@ def _provider_cost(model: str, usage: dict, messages: list[dict[str, str]], outp
     return input_tokens, output_tokens, estimate_cost(model, input_tokens, output_tokens, cached), bool(usage)
 
 
-async def _provider_completion(model: str, messages: list[dict[str, str]], max_tokens: int) -> dict:
-    payload = {"model": model, "messages": messages, "temperature": 0, "max_completion_tokens": max_tokens, "store": False}
+async def _provider_completion(model: str, messages: list[dict[str, str]], max_tokens: int, api_key: str | None = None) -> dict:
+    model_config = load_prices()["models"][model]
+    provider = model_config.get("provider", "openai")
+    key = api_key or (settings.upstream_api_key if provider == "openai" else os.getenv({"anthropic": "ANTHROPIC_API_KEY", "moonshot": "MOONSHOT_API_KEY"}.get(provider, ""), ""))
+    if not key:
+        raise RuntimeError(f"add a {provider} API key in BYOK settings")
+    provider_model = model_config.get("provider_model", model)
+    if provider == "anthropic":
+        system = "\n\n".join(message["content"] for message in messages if message["role"] == "system")
+        payload = {"model": provider_model, "max_tokens": max_tokens, "system": system, "messages": [{"role": m["role"], "content": m["content"]} for m in messages if m["role"] != "system"]}
+        url = "https://api.anthropic.com/v1/messages"
+        headers = {"x-api-key": key, "anthropic-version": "2023-06-01", "content-type": "application/json"}
+    else:
+        provider_config = load_prices()["providers"].get(provider)
+        if not provider_config:
+            raise RuntimeError("provider configuration is missing")
+        payload = {"model": provider_model, "messages": messages, "temperature": 0, "max_completion_tokens": max_tokens, "store": False} if provider == "openai" else {"model": provider_model, "messages": messages, "temperature": 0, "max_tokens": max_tokens}
+        base_url = settings.upstream_base_url if provider == "openai" else provider_config["base_url"]
+        url = f"{base_url}/chat/completions"
+        headers = {"Authorization": f"Bearer {key}"}
     async with httpx.AsyncClient(timeout=settings.request_timeout_seconds) as client:
-        response = await client.post(f"{settings.upstream_base_url}/chat/completions", json=payload, headers={"Authorization": f"Bearer {settings.upstream_api_key}"})
+        response = await client.post(url, json=payload, headers=headers)
     if response.status_code >= 400:
         raise RuntimeError(f"provider returned HTTP {response.status_code}")
     data = response.json()
-    output = data.get("choices", [{}])[0].get("message", {}).get("content")
+    if provider == "anthropic":
+        output = "".join(block.get("text", "") for block in data.get("content", []) if block.get("type") == "text")
+        usage = {"input_tokens": data.get("usage", {}).get("input_tokens", 0), "output_tokens": data.get("usage", {}).get("output_tokens", 0)}
+    else:
+        output = data.get("choices", [{}])[0].get("message", {}).get("content")
+        usage = data.get("usage", {})
     if not isinstance(output, str):
         raise RuntimeError("provider response did not contain text")
-    return {"output": output, "usage": data.get("usage", {})}
+    return {"output": output, "usage": usage}
 
 
 def _parse_judge(text: str) -> tuple[float | None, str]:
@@ -226,8 +259,6 @@ async def run_experiment(body: ExperimentRequest, authorization: str | None = He
     await authorize(authorization)
     if settings.demo_mode:
         raise HTTPException(status_code=503, detail="live experiments are disabled in demo mode")
-    if not settings.upstream_api_key:
-        raise HTTPException(status_code=503, detail="configure UPSTREAM_API_KEY or OPENAI_API_KEY in the local environment")
     prices = load_prices()["models"]
     requested_models = {variant.model for variant in body.variants}
     if body.judge_model:
@@ -235,20 +266,23 @@ async def run_experiment(body: ExperimentRequest, authorization: str | None = He
     unknown = requested_models - prices.keys()
     if unknown:
         raise HTTPException(status_code=422, detail={"message":"add a price entry before using these models", "models":sorted(unknown)})
-    if len(body.cases) * len(body.variants) * (2 if body.scorer == "judge" else 1) > 48:
-        raise HTTPException(status_code=422, detail="experiment exceeds the 48-call limit")
+    if len(body.cases) * len(body.variants) * (2 if body.scorer == "judge" else 1) > 12000:
+        raise HTTPException(status_code=422, detail="experiment exceeds the 12,000-call safety limit")
     preflight = _preflight_cost(body)
     if preflight > body.max_budget_usd:
         raise HTTPException(status_code=422, detail={"message":"preflight estimate exceeds the experiment budget", "estimated_max_usd":round(preflight, 6), "max_budget_usd":body.max_budget_usd})
     await throttle()
-    rows = []
-    for variant in body.variants:
-        for case in body.cases:
+    provider_slots = asyncio.Semaphore(4)
+
+    async def run_one(variant: EvalVariant, case: EvalCase) -> dict:
             messages = [{"role":"system","content":variant.system_prompt}, {"role":"user","content":fill_template(variant.user_template, case.input)}]
             started = time.perf_counter()
             row = {"case_id":case.id,"variant_id":variant.id,"model":variant.model,"status":"ok","output":"","score":None,"score_reason":"","input_tokens":0,"output_tokens":0,"provider_usage_reported":False,"latency_ms":0,"judge_latency_ms":0,"estimated_model_cost_usd":0,"estimated_judge_cost_usd":0,"estimated_total_cost_usd":0}
             try:
-                result = await _provider_completion(variant.model, messages, body.max_output_tokens)
+                provider = prices[variant.model].get("provider", "openai")
+                provider_key = body.provider_api_keys.get(provider)
+                async with provider_slots:
+                    result = await _provider_completion(variant.model, messages, body.max_output_tokens, provider_key.get_secret_value() if provider_key else None)
                 row["output"] = result["output"]
                 row["input_tokens"], row["output_tokens"], row["estimated_model_cost_usd"], row["provider_usage_reported"] = _provider_cost(variant.model, result["usage"], messages, result["output"])
                 row["latency_ms"] = round((time.perf_counter() - started) * 1000, 2)
@@ -260,7 +294,10 @@ async def run_experiment(body: ExperimentRequest, authorization: str | None = He
                         {"role":"system","content":"You are a strict evaluator. Grade only the response against the reference and rubric. Return JSON only with score as an integer 1-5 and reason as a short string. A 4 or 5 means the answer satisfies the task without a material error."},
                         {"role":"user","content":f"Rubric:\n{body.rubric}\n\nInput:\n{case.input}\n\nReference:\n{case.expected}\n\nCandidate response:\n{result['output']}"},
                     ]
-                    judged = await _provider_completion(body.judge_model, judge_messages, 128)
+                    judge_provider = prices[body.judge_model].get("provider", "openai")
+                    judge_key = body.provider_api_keys.get(judge_provider)
+                    async with provider_slots:
+                        judged = await _provider_completion(body.judge_model, judge_messages, 128, judge_key.get_secret_value() if judge_key else None)
                     row["judge_latency_ms"] = round((time.perf_counter() - judge_started) * 1000, 2)
                     row["score"], row["score_reason"] = _parse_judge(judged["output"])
                     _, _, row["estimated_judge_cost_usd"], _ = _provider_cost(body.judge_model, judged["usage"], judge_messages, judged["output"])
@@ -269,10 +306,12 @@ async def run_experiment(body: ExperimentRequest, authorization: str | None = He
                 row["status"] = "error"
                 row["error"] = str(exc)[:200]
                 row["latency_ms"] = round((time.perf_counter() - started) * 1000, 2)
-            rows.append(row)
+            return row
+
+    rows = await asyncio.gather(*(run_one(variant, case) for variant in body.variants for case in body.cases))
     baseline_id = body.variants[0].id
     report = result_summary(rows, [dict(v.model_dump(), scorer=body.scorer) for v in body.variants], baseline_id)
-    payload = body.model_dump()
+    payload = body.model_dump(exclude={"provider_api_keys"})
     total_estimated_cost=sum(r["estimated_total_cost_usd"] for r in rows)
     experiment_id = save_experiment(settings.database_path, body.name, body.task_type, body.scorer, payload, {"report":report,"rows":rows,"preflight_estimate_usd":round(preflight,9),"estimated_total_cost_usd":round(total_estimated_cost,9)})
     return {"id":experiment_id,"name":body.name,"task_type":body.task_type,"scorer":body.scorer,"created_at":datetime.now(timezone.utc).isoformat(),"preflight_estimate_usd":round(preflight,9),"estimated_total_cost_usd":round(total_estimated_cost,9),"report":report,"rows":rows}
@@ -329,8 +368,6 @@ async def chat_completions(body: ChatRequest, request: Request, authorization: s
     await throttle()
     if settings.demo_mode:
         raise HTTPException(status_code=503, detail="live inference is disabled in demo mode")
-    if not settings.upstream_api_key:
-        raise HTTPException(status_code=503, detail="upstream provider is not configured")
     messages = [m.model_dump() for m in body.messages]
     joined = "\n".join(m["content"] for m in messages)
     task_type = request.headers.get("x-costcutter-task", "").lower()
@@ -348,6 +385,11 @@ async def chat_completions(body: ChatRequest, request: Request, authorization: s
             user_message["content"] = fill_template(policy["user_template"], user_message["content"])
     else:
         model, reason = choose_model(joined, settings.cheap_model, settings.baseline_model, request.headers.get("x-costcutter-tier"))
+    provider = load_prices()["models"].get(model, {}).get("provider", "openai")
+    if provider != "openai" and not os.getenv({"anthropic": "ANTHROPIC_API_KEY", "moonshot": "MOONSHOT_API_KEY"}.get(provider, "")):
+        raise HTTPException(status_code=503, detail=f"{provider} provider key is not configured for gateway use")
+    if provider == "openai" and not settings.upstream_api_key:
+        raise HTTPException(status_code=503, detail="upstream provider is not configured")
     key = request_hash(messages, model, body.temperature, body.max_tokens)
     started = time.perf_counter()
     cached = get_cache(settings.database_path, key)
@@ -358,6 +400,22 @@ async def chat_completions(body: ChatRequest, request: Request, authorization: s
         return cached
     if daily_spend(settings.database_path) >= settings.max_daily_spend_usd:
         raise HTTPException(status_code=429, detail="daily estimated spend limit reached")
+    if provider != "openai":
+        try:
+            completion = await _provider_completion(model, messages, body.max_tokens)
+        except RuntimeError as exc:
+            raise HTTPException(status_code=502, detail=str(exc)) from exc
+        usage = completion["usage"]
+        input_tokens = int(usage.get("prompt_tokens", usage.get("input_tokens", token_estimate(messages))))
+        output_text = completion["output"]
+        output_tokens = int(usage.get("completion_tokens", usage.get("output_tokens", token_estimate([{"content": output_text}]))))
+        cost = estimate_cost(model, input_tokens, output_tokens)
+        elapsed = (time.perf_counter() - started) * 1000
+        result = {"id": f"costcutter-{uuid.uuid4()}", "model": model, "choices": [{"message": {"role": "assistant", "content": output_text}, "finish_reason": "stop"}], "usage": {"prompt_tokens": input_tokens, "completion_tokens": output_tokens, "total_tokens": input_tokens + output_tokens}}
+        result["costcutter"] = {"model": model, "route_reason": reason, "cache_hit": False, "input_tokens": input_tokens, "output_tokens": output_tokens, "estimated_cost_usd": cost, "cost_basis": "provider usage" if usage else "estimated token count; provider omitted usage", "latency_ms": round(elapsed, 2)}
+        set_cache(settings.database_path, key, result)
+        write_usage(settings.database_path, {"id": str(uuid.uuid4()), "created_at": datetime.now(timezone.utc).isoformat(), "request_hash": key, "model": model, "route_reason": reason, "cache_hit": 0, "input_tokens": input_tokens, "output_tokens": output_tokens, "latency_ms": elapsed, "estimated_cost_usd": cost, "outcome": "ok"})
+        return result
     payload = {"model": model, "messages": messages, "temperature": body.temperature, "max_completion_tokens": body.max_tokens}
     last_error = None
     for attempt in range(settings.max_retries + 1):
