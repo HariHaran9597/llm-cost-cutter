@@ -6,6 +6,8 @@
 
 The hosted [project page](https://hariharan9597.github.io/llm-cost-cutter/) includes a token-cost calculator and the reproducible Banking77 sample. Live comparisons run on your machine using your own API keys. The page is static; it never receives provider keys or proxies calls.
 
+Watch the [60-second captioned walkthrough](https://hariharan9597.github.io/llm-cost-cutter/demo.mp4). It covers the cost calculator, local BYOK workflow, benchmark protocol, report metrics, and the honest pending-score status.
+
 ## What a user does
 
 1. Choose a workload and prepare examples with expected labels or answers. The included Banking77 sample is a stratified 385-case slice of its official held-out test set: five examples from each of 77 intents.

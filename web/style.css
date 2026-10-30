@@ -6,3 +6,4 @@
 .byok-grid label{font-size:10px}.byok-grid input{font-size:10px;min-width:0;padding:8px}
 .button-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px}.button-row .muted{margin:0}
 @media(max-width:640px){.token-form>.byok-grid{grid-template-columns:1fr}}
+.video-panel video{display:block;margin-top:1rem;border-radius:12px;background:#080c16;max-height:70vh}.video-panel{margin-bottom:1rem}

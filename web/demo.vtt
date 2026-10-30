@@ -1,0 +1,19 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:10.000
+Compare the same labeled workload across models or prompt versions.
+
+00:00:10.000 --> 00:00:20.000
+Use the live calculator for a same-token-volume list-price comparison.
+
+00:00:20.000 --> 00:00:30.000
+Bring your own provider keys. The hosted static page never receives them.
+
+00:00:30.000 --> 00:00:40.000
+The reproducible Banking77 run samples five examples from each of 77 intents.
+
+00:00:40.000 --> 00:00:50.000
+Review confidence intervals, paired quality differences, cost, latency and errors.
+
+00:00:50.000 --> 00:01:00.000
+The runner is ready. The live score remains pending real provider calls.
