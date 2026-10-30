@@ -4,7 +4,7 @@ import argparse
 import json
 from pathlib import Path
 
-EXPECTED_MODELS = {"gpt-6-luna", "claude-haiku-5-5", "kimi-k2.6"}
+EXPECTED_MODELS = {"gpt-6-luna", "claude-haiku-5-5", "groq-qwen3.8-27b"}
 
 
 def publish(source: Path) -> Path:

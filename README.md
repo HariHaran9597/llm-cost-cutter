@@ -21,7 +21,7 @@ Watch the [60-second captioned walkthrough](https://hariharan9597.github.io/llm-
 
 The reproducible benchmark uses the original PolyAI BANKING77 official test split (3,080 rows, 77 intents), pinned to source revision `9d081458ff52e53cf7e848f414e6e9344e4e6696`. The committed sample is deterministically drawn with seed `20261030`, five examples per intent (385 total). The source file SHA-256 is verified before any run. Dataset license: CC BY 4.0. See the [dataset card](https://huggingface.co/datasets/PolyAI/banking77) and [original source](https://github.com/PolyAI-LDN/task-specific-datasets).
 
-The recorded benchmark protocol is fixed to GPT-6 Luna, Claude Haiku 5.5, and Kimi K2.6, with one zero-shot prompt and exact intent-label scoring. Groq Qwen 3.8 27B is selectable for local workload experiments; it is not included in that three-model benchmark or any published result. Provider errors count as incorrect in the accuracy denominator; p95 latency is over successful calls and labeled accordingly. The runner produces a dated result bundle with individual outputs and protocol metadata. A public headline is published only after real calls complete; no model result is inferred from list prices or mocked tests.
+The recorded benchmark protocol compares GPT-6 Luna, Claude Haiku 5.5, and Groq Qwen 3.8 27B, with one zero-shot prompt and exact intent-label scoring. Kimi models remain selectable for local workload experiments and available in the cost calculator, but are not included in this benchmark. Provider errors count as incorrect in the accuracy denominator; p95 latency is over successful calls and labeled accordingly. The runner produces a dated result bundle with individual outputs and protocol metadata. A public headline is published only after real calls complete; no model result is inferred from list prices or mocked tests.
 
 ### Run it
 
@@ -44,9 +44,8 @@ To run it, put provider keys in environment variables (or in an ignored `.env` l
 ```powershell
 $env:OPENAI_API_KEY = "..."
 $env:ANTHROPIC_API_KEY = "..."
-$env:MOONSHOT_API_KEY = "..."
 $env:GROQ_API_KEY = "..."
-python -m benchmarks.run_banking77 --execute --max-budget-usd 1.00
+python -m benchmarks.run_banking77 --execute --max-budget-usd 0.50
 ```
 
 The CLI requires an explicit cap at or above its preflight estimate. The estimate is approximate, so configure billing limits at each provider too. Results are written under the ignored `benchmark-results/` directory. To publish a result, review the bundle and run:

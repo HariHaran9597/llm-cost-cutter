@@ -13,7 +13,7 @@ def test_banking77_sample_is_stratified_reproducible_and_pinned():
 
 def test_benchmark_dry_run_prices_three_provider_models():
     costs = estimated_budget(load_cases())
-    assert set(costs) == {"gpt-6-luna", "claude-haiku-5-5", "kimi-k2.6"}
+    assert set(costs) == {"gpt-6-luna", "claude-haiku-5-5", "groq-qwen3.8-27b"}
     assert all(cost > 0 for cost in costs.values())
 
 

@@ -26,7 +26,7 @@ SOURCE_URL = f"https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datase
 SOURCE_SHA256 = "e10f6bc95fe4e3eb5e8060f60f09aee8b17d03f23ce0047d9511e8003c26c808"
 SEED = 20261030
 PER_INTENT = 5
-MODELS = ["gpt-6-luna", "claude-haiku-5-5", "kimi-k2.6"]
+MODELS = ["gpt-6-luna", "claude-haiku-5-5", "groq-qwen3.8-27b"]
 SYSTEM = """Classify the banking customer message into exactly one intent from the list below. Return only the exact intent label, with no punctuation or explanation.
 Allowed intents: {intents}"""
 
@@ -120,7 +120,7 @@ async def run(args: argparse.Namespace) -> None:
     ceiling = sum(estimates.values())
     if args.max_budget_usd is None or args.max_budget_usd < ceiling:
         raise SystemExit(f"Set --max-budget-usd at or above the preflight estimate (${ceiling:.4f}); no provider calls were made.")
-    env_by_provider = {"openai": "OPENAI_API_KEY", "anthropic": "ANTHROPIC_API_KEY", "moonshot": "MOONSHOT_API_KEY"}
+    env_by_provider = {"openai": "OPENAI_API_KEY", "anthropic": "ANTHROPIC_API_KEY", "groq": "GROQ_API_KEY"}
     prices = load_prices()["models"]
     missing = sorted({env_by_provider[prices[model]["provider"]] for model in MODELS if not os.getenv(env_by_provider[prices[model]["provider"]])})
     if missing:
