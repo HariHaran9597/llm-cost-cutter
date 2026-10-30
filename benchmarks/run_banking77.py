@@ -23,7 +23,7 @@ from app.statistics import paired_bootstrap_delta, wilson_interval  # noqa: E402
 
 SOURCE_REVISION = "9d081458ff52e53cf7e848f414e6e9344e4e6696"
 SOURCE_URL = f"https://raw.githubusercontent.com/PolyAI-LDN/task-specific-datasets/{SOURCE_REVISION}/banking_data/test.csv"
-SOURCE_SHA256 = "d12d6e3bc4c3103966ae786dc435913c0c563dfa328f5a3646d0e62cfeeb474d"
+SOURCE_SHA256 = "e10f6bc95fe4e3eb5e8060f60f09aee8b17d03f23ce0047d9511e8003c26c808"
 SEED = 20261030
 PER_INTENT = 5
 MODELS = ["gpt-6-luna", "claude-haiku-5-5", "kimi-k2.6"]
@@ -35,7 +35,8 @@ def load_cases() -> list[dict[str, str]]:
     source = ROOT / "benchmarks" / "banking77_test.csv"
     if not source.exists():
         raise SystemExit(f"Missing pinned dataset file: {source}")
-    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+    # Git may normalize CSV line endings across Windows/Linux; pin canonical LF bytes.
+    digest = hashlib.sha256(source.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
     if digest != SOURCE_SHA256:
         raise SystemExit(f"Dataset checksum mismatch: expected {SOURCE_SHA256}, got {digest}")
     with source.open(encoding="utf-8", newline="") as handle:
