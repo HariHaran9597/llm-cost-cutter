@@ -89,7 +89,7 @@ class ExperimentRequest(BaseModel):
     @field_validator("provider_api_keys")
     @classmethod
     def validate_provider_keys(cls, value):
-        allowed = {"openai", "anthropic", "moonshot"}
+        allowed = {"openai", "anthropic", "moonshot", "groq"}
         if len(value) > len(allowed) or any(provider not in allowed or len(key.get_secret_value()) > 500 for provider, key in value.items()):
             raise ValueError("provider key settings are invalid")
         return value
@@ -207,7 +207,7 @@ def _provider_cost(model: str, usage: dict, messages: list[dict[str, str]], outp
 async def _provider_completion(model: str, messages: list[dict[str, str]], max_tokens: int, api_key: str | None = None) -> dict:
     model_config = load_prices()["models"][model]
     provider = model_config.get("provider", "openai")
-    key = api_key or (settings.upstream_api_key if provider == "openai" else os.getenv({"anthropic": "ANTHROPIC_API_KEY", "moonshot": "MOONSHOT_API_KEY"}.get(provider, ""), ""))
+    key = api_key or (settings.upstream_api_key if provider == "openai" else os.getenv({"anthropic": "ANTHROPIC_API_KEY", "moonshot": "MOONSHOT_API_KEY", "groq": "GROQ_API_KEY"}.get(provider, ""), ""))
     if not key:
         raise RuntimeError(f"add a {provider} API key in BYOK settings")
     provider_model = model_config.get("provider_model", model)
@@ -221,6 +221,8 @@ async def _provider_completion(model: str, messages: list[dict[str, str]], max_t
         if not provider_config:
             raise RuntimeError("provider configuration is missing")
         payload = {"model": provider_model, "messages": messages, "temperature": 0, "max_completion_tokens": max_tokens, "store": False} if provider == "openai" else {"model": provider_model, "messages": messages, "temperature": 0, "max_tokens": max_tokens}
+        if provider == "groq":
+            payload.update({"max_completion_tokens": max_tokens, "reasoning_effort": "none", "reasoning_format": "hidden"})
         base_url = settings.upstream_base_url if provider == "openai" else provider_config["base_url"]
         url = f"{base_url}/chat/completions"
         headers = {"Authorization": f"Bearer {key}"}
@@ -386,7 +388,7 @@ async def chat_completions(body: ChatRequest, request: Request, authorization: s
     else:
         model, reason = choose_model(joined, settings.cheap_model, settings.baseline_model, request.headers.get("x-costcutter-tier"))
     provider = load_prices()["models"].get(model, {}).get("provider", "openai")
-    if provider != "openai" and not os.getenv({"anthropic": "ANTHROPIC_API_KEY", "moonshot": "MOONSHOT_API_KEY"}.get(provider, "")):
+    if provider != "openai" and not os.getenv({"anthropic": "ANTHROPIC_API_KEY", "moonshot": "MOONSHOT_API_KEY", "groq": "GROQ_API_KEY"}.get(provider, "")):
         raise HTTPException(status_code=503, detail=f"{provider} provider key is not configured for gateway use")
     if provider == "openai" and not settings.upstream_api_key:
         raise HTTPException(status_code=503, detail="upstream provider is not configured")

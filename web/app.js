@@ -101,6 +101,7 @@ function renderPrices() {
     addVariant({id:'baseline',name:'Baseline — GPT Luna',model:'gpt-6-luna'});
     addVariant({id:'claude-haiku',name:'Claude Haiku',model:'claude-haiku-5-5'});
     addVariant({id:'kimi-k26',name:'Kimi K2.6',model:'kimi-k2.6'});
+    addVariant({id:'groq-qwen',name:'Groq Qwen 3.8 27B',model:'groq-qwen3.8-27b'});
   }
 }
 
@@ -116,7 +117,7 @@ async function connect() {
   try{
     await api('./api/experiments');
     $('#model-status').textContent='Select a priced model and enter that provider’s BYOK key above. Model access is checked by the provider at call time.';
-    $('#connection-state').textContent=app.config.demo_mode?'Connected · set LLMCUTTER_DEMO_MODE=false locally to enable BYOK runs':'Connected · choose models from OpenAI, Anthropic, and Moonshot/Kimi';
+    $('#connection-state').textContent=app.config.demo_mode?'Connected · set LLMCUTTER_DEMO_MODE=false locally to enable BYOK runs':'Connected · choose models from OpenAI, Anthropic, Moonshot/Kimi, and Groq';
     $('#connection-state').className=app.config.live_enabled?'status good':'status warning-text';
     $('#run').disabled=!!app.config.demo_mode;
     await Promise.all([refreshHistory(),refreshPolicies()]);
@@ -144,7 +145,7 @@ function setBusy(busy){$('#run').disabled=busy||!!app.config?.demo_mode;$('#run'
 async function runExperiment() {
   let cases,variants;try{cases=readCases();variants=readVariants();}catch(error){alert(error.message);return;}
   const provider_api_keys={};
-  for(const [provider,id] of [['openai','key-openai'],['anthropic','key-anthropic'],['moonshot','key-moonshot']])if($(`#${id}`).value.trim())provider_api_keys[provider]=$(`#${id}`).value.trim();
+  for(const [provider,id] of [['openai','key-openai'],['anthropic','key-anthropic'],['moonshot','key-moonshot'],['groq','key-groq']])if($(`#${id}`).value.trim())provider_api_keys[provider]=$(`#${id}`).value.trim();
   const body={name:$('#experiment-name').value,task_type:$('#task-type').value,cases,variants,scorer:$('#scorer').value,judge_model:$('#judge-model').value,rubric:$('#rubric').value||null,max_output_tokens:Number($('#max-tokens').value),max_budget_usd:Number($('#budget').value),provider_api_keys};
   if(body.scorer==='judge'&&!body.rubric){alert('Write a rubric before using LLM judge scoring.');return;}
   const rough=$('#estimate').textContent;
@@ -152,7 +153,7 @@ async function runExperiment() {
   setBusy(true);$('#connection-state').textContent='Experiment running. Each model receives the same cases; this can take a little while.';
   try{app.currentRun=await api('./api/experiments/run',{method:'POST',body:JSON.stringify(body)});renderRun(app.currentRun);await Promise.all([refreshHistory(),refreshPolicies()]);$('#connection-state').textContent=`Connected · completed ${app.currentRun.rows.length} candidate/case runs · estimated charges ${fmtMoney(app.currentRun.estimated_total_cost_usd,6)}`;}
   catch(error){$('#connection-state').textContent=`Run stopped: ${error.message}`;$('#connection-state').className='status warning-text';}
-  finally{for(const id of ['key-openai','key-anthropic','key-moonshot'])$(`#${id}`).value='';setBusy(false);}
+  finally{for(const id of ['key-openai','key-anthropic','key-moonshot','key-groq'])$(`#${id}`).value='';setBusy(false);}
 }
 
 function renderRun(run) {

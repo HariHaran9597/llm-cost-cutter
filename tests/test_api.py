@@ -148,17 +148,19 @@ def test_byok_keys_are_ephemeral_and_anthropic_wire_shape(tmp_path, monkeypatch)
         "variants": [
             {"id": "a", "name": "OpenAI baseline", "model": "gpt-6-luna", "system_prompt": "Classify"},
             {"id": "b", "name": "Claude candidate", "model": "claude-haiku-5-5", "system_prompt": "Classify"},
+            {"id": "c", "name": "Groq candidate", "model": "groq-qwen3.8-27b", "system_prompt": "Classify"},
         ],
-        "provider_api_keys": {"openai": "temporary-openai-key", "anthropic": "temporary-anthropic-key"},
+        "provider_api_keys": {"openai": "temporary-openai-key", "anthropic": "temporary-anthropic-key", "groq": "temporary-groq-key"},
     }
     with TestClient(main.app) as client:
         response = client.post("/api/experiments/run", headers={"Authorization": "Bearer byok-secret"}, json=body)
         assert response.status_code == 200, response.text
-    assert captured == [("gpt-6-luna", "temporary-openai-key"), ("claude-haiku-5-5", "temporary-anthropic-key")]
+    assert captured == [("gpt-6-luna", "temporary-openai-key"), ("claude-haiku-5-5", "temporary-anthropic-key"), ("groq-qwen3.8-27b", "temporary-groq-key")]
     stored = main.get_experiment(main.settings.database_path, response.json()["id"])
     assert "provider_api_keys" not in stored["payload"]
     assert "temporary-anthropic-key" not in response.text
     assert "temporary-openai-key" not in open(main.settings.database_path, "rb").read().decode("latin1")
+    assert "temporary-groq-key" not in open(main.settings.database_path, "rb").read().decode("latin1")
 
 
 def test_anthropic_adapter_keeps_api_key_in_header_and_normalizes_usage(monkeypatch):
@@ -182,6 +184,31 @@ def test_anthropic_adapter_keeps_api_key_in_header_and_normalizes_usage(monkeypa
     assert url == "https://api.anthropic.com/v1/messages"
     assert payload["system"] == "System" and payload["messages"][0]["role"] == "user"
     assert headers["x-api-key"] == "ephemeral-test-key"
+
+
+def test_groq_adapter_uses_openai_compatible_endpoint_and_hides_reasoning(monkeypatch):
+    captured = []
+    class FakeResponse:
+        status_code = 200
+        def json(self):
+            return {"choices": [{"message": {"content": "billing"}}], "usage": {"prompt_tokens": 23, "completion_tokens": 1}}
+    class FakeClient:
+        def __init__(self, **kwargs): pass
+        async def __aenter__(self): return self
+        async def __aexit__(self, *args): return None
+        async def post(self, url, json=None, headers=None):
+            captured.append((url, json, headers))
+            return FakeResponse()
+    monkeypatch.setattr(main.httpx, "AsyncClient", FakeClient)
+    import asyncio
+    result = asyncio.run(main._provider_completion("groq-qwen3.8-27b", [{"role":"system","content":"System"},{"role":"user","content":"Ticket"}], 32, "ephemeral-groq-key"))
+    assert result == {"output": "billing", "usage": {"prompt_tokens": 23, "completion_tokens": 1}}
+    url, payload, headers = captured[0]
+    assert url == "https://api.groq.com/openai/v1/chat/completions"
+    assert payload["model"] == "qwen/qwen3.8-27b"
+    assert payload["reasoning_effort"] == "none" and payload["reasoning_format"] == "hidden"
+    assert payload["max_completion_tokens"] == 32 and "stream" not in payload
+    assert headers["Authorization"] == "Bearer ephemeral-groq-key"
 
 
 def test_experiment_budget_rejects_before_any_provider_call(tmp_path,monkeypatch):

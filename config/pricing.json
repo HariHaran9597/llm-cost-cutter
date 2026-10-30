@@ -6,7 +6,8 @@
   "providers": {
     "openai": {"base_url": "https://api.openai.com/v1", "source": "https://developers.openai.com/api/docs/pricing/"},
     "anthropic": {"base_url": "https://api.anthropic.com", "source": "https://docs.anthropic.com/en/docs/about-claude/pricing"},
-    "moonshot": {"base_url": "https://api.moonshot.ai/v1", "source": "https://platform.kimi.ai/"}
+    "moonshot": {"base_url": "https://api.moonshot.ai/v1", "source": "https://platform.kimi.ai/"},
+    "groq": {"base_url": "https://api.groq.com/openai/v1", "source": "https://console.groq.com/docs/model/qwen/qwen3.8-27b"}
   },
   "models": {
     "gpt-6-luna": {"provider": "openai", "input": 0.10, "cached_input": 0.01, "output": 0.50},
@@ -16,6 +17,7 @@
     "claude-haiku-5-5": {"provider": "anthropic", "provider_model": "claude-haiku-5-5", "input": 0.10, "cached_input": 0.01, "output": 0.50},
     "claude-sonnet-5-5": {"provider": "anthropic", "provider_model": "claude-sonnet-5-5", "input": 2.00, "cached_input": 0.10, "output": 10.00},
     "kimi-k2.6": {"provider": "moonshot", "provider_model": "kimi-k2.6", "input": 0.95, "cached_input": 0.16, "output": 4.00},
-    "kimi-k3": {"provider": "moonshot", "provider_model": "kimi-k3", "input": 3.00, "cached_input": 0.30, "output": 15.00}
+    "kimi-k3": {"provider": "moonshot", "provider_model": "kimi-k3", "input": 3.00, "cached_input": 0.30, "output": 15.00},
+    "groq-qwen3.8-27b": {"provider": "groq", "provider_model": "qwen/qwen3.8-27b", "input": 0.80, "output": 4.00}
   }
 }
