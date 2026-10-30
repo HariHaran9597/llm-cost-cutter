@@ -5,7 +5,7 @@ on:
 permissions:
   contents: read
 jobs:
-  test-and-build-demo:
+  test-live-workbench:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,8 +15,3 @@ jobs:
           cache: pip
       - run: pip install -r requirements.txt
       - run: python -m pytest -q
-      - run: python -m app.benchmark --write-report
-      - uses: actions/upload-artifact@v4
-        with:
-          name: benchmark-report
-          path: web/data/benchmark-report.json

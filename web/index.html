@@ -2,19 +2,50 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Replayable benchmark dashboard for an inspectable LLM cost routing gateway.">
-  <title>LLM Cost Cutter — benchmark replay</title>
-  <link rel="stylesheet" href="./style.css">
-  <script src="./app.js" defer></script>
+  <meta name="description" content="Compare real LLM models and prompts on your own evaluation cases. See quality, measured latency, and token cost before routing traffic.">
+  <title>LLM Cost Cutter — model and prompt lab</title>
+  <link rel="stylesheet" href="./style.css"><script src="./app.js" defer></script>
 </head>
 <body>
-  <header class="top"><a class="brand" href="./">LLM Cost Cutter<span> / replay lab</span></a><a class="source" href="https://github.com/HariHaran9597/llm-cost-cutter">Source ↗</a></header>
+  <header class="top"><a class="brand" href="./"><span class="logo">LC</span><span>LLM Cost Cutter</span></a><a class="source" href="https://github.com/HariHaran9597/llm-cost-cutter">GitHub ↗</a></header>
   <main>
-    <section class="hero"><div class="eyebrow">OPEN BENCHMARK · V0.1</div><h1>Spend less on routine<br>LLM requests.</h1><p>Replay the same hand-checked tasks through a fixed model and a deterministic routing policy. Inspect every decision and its estimated cost.</p><div class="warning">Replay only. This page makes no live model calls; timings are simulated.</div></section>
-    <section class="metrics" id="metrics" aria-live="polite"></section>
-    <section class="panel"><div class="panel-head"><div><div class="eyebrow">ROUTING POLICY</div><h2>Simple tasks go small. Hard tasks stay strong.</h2></div><span class="tag">INSPECTABLE · DETERMINISTIC</span></div><div class="policy"><div><b>GPT‑4.1 mini</b><span>Extraction · classification · summarization</span></div><div class="arrow">→</div><div><b>GPT‑4.1</b><span>Reasoning · unknown requests · explicit quality tier</span></div></div></section>
-    <section class="panel"><div class="panel-head"><div><div class="eyebrow">REQUEST-LEVEL REPLAY</div><h2>Every task, every route</h2></div><label class="filter">Task type <select id="task-filter"><option value="all">All tasks</option></select></label></div><div class="table-wrap"><table><thead><tr><th>Task</th><th>Type</th><th>Selected model</th><th>Quality</th><th>Baseline cost</th><th>Routed cost</th><th>Route reason</th></tr></thead><tbody id="rows"></tbody></table></div></section>
-    <footer><p id="method"></p><p>Price rates checked <span id="price-date"></span>. <a href="https://developers.openai.com/api/docs/pricing/">Official pricing source</a>. Estimated charges are not invoices.</p><p>Local live gateway requires a server-side provider key and an API token. Public demo contains benchmark replays only.</p></footer>
+    <section class="hero">
+      <div class="eyebrow">MODEL + PROMPT EVALUATION WORKBENCH</div>
+      <h1>Find the lowest-cost setup<br>that still does <em>your job</em>.</h1>
+      <p>Run the same real task examples through different models and prompts. Compare answer quality, provider token usage, actual latency, and cost. Promote a candidate into a task-specific gateway policy when it earns the switch.</p>
+      <div class="flow"><span>YOUR EXAMPLES</span><b>→</b><span>MODEL × PROMPT RUNS</span><b>→</b><span>MEASURED CHOICE</span><b>→</b><span>GATEWAY POLICY</span></div>
+    </section>
+    <section class="connect panel">
+      <div><div class="eyebrow">LOCAL CONNECTION</div><h2>Connect your local gateway</h2><p id="connection-state">Checking local API…</p></div>
+      <form id="token-form" class="token-form"><label for="token">Gateway token</label><div><input id="token" type="password" autocomplete="off" placeholder="Set GATEWAY_API_TOKEN in .env"><button class="button secondary" type="submit">Connect</button></div></form>
+    </section>
+    <section class="grid">
+      <div class="configure panel">
+        <div class="section-title"><div><div class="eyebrow">01 / DEFINE THE JOB</div><h2>What should the models do?</h2></div><span class="local-tag">STAYS ON YOUR MACHINE</span></div>
+        <label>Experiment name<input id="experiment-name" value="Support ticket routing" maxlength="120"></label>
+        <label>Task key <input id="task-type" value="support-routing" maxlength="40"><small>Used by the gateway header after you promote a winner.</small></label>
+        <label>Evaluation cases <span class="right-note">JSON Lines: one input + expected answer per row</span><textarea id="cases" rows="8" spellcheck="false"></textarea><small>Use sanitized examples. Inputs, expected answers, and model outputs are saved in your local SQLite database for inspection.</small></label>
+        <div class="section-title variant-title"><div><div class="eyebrow">02 / BUILD THE COMPARISON</div><h2>Candidate model + prompt versions</h2></div><button class="button secondary" id="add-variant" type="button">+ Add candidate</button></div>
+        <div id="variants"></div>
+        <div class="split">
+          <label>Scoring method<select id="scorer"><option value="exact">Exact answer — repeatable</option><option value="contains">Expected text appears</option><option value="judge">LLM judge — score 1 to 5</option></select></label>
+          <label>Max output tokens per call<input id="max-tokens" type="number" min="16" max="512" value="128"></label>
+        </div>
+        <div id="rubric-wrap" class="hidden"><label>Judge model<select id="judge-model"></select></label><label>Judge rubric<textarea id="rubric" rows="3" placeholder="What makes an answer correct and useful for this task?"></textarea><small>Judge calls cost extra and are included in the measured run cost. Spot-check its scores.</small></label></div>
+        <div class="budget-row"><label>Experiment budget cap (USD)<input id="budget" type="number" min="0.001" max="5" step="0.01" value="0.10"></label><div id="estimate" class="estimate">Approximate maximum: —</div></div>
+        <div class="notice">Preflight shows a spend estimate from configured rates and approximate tokens; it is not a hard billing cap. Provider billing can vary, so set a provider-side spend limit too. This run can make up to 48 live calls.</div>
+        <button class="button primary" id="run" type="button" disabled>Run live comparison</button>
+        <p class="footnote">The first candidate is the baseline. The recommendation picks the lowest-cost candidate within 5 quality points of baseline, if it has no provider errors.</p>
+      </div>
+      <aside class="side">
+        <section class="panel"><div class="eyebrow">WHAT YOU GET</div><h2>Decision evidence, per case</h2><ul class="benefits"><li><b>Quality</b><span>Pass rate, denominator, and individual failed answers</span></li><li><b>Spend</b><span>Provider-reported tokens priced by your local rate table</span></li><li><b>Speed</b><span>Actual request latency, p50 and p95</span></li><li><b>Action</b><span>Promote a tested model and prompt for one task key</span></li></ul></section>
+        <section class="panel"><div class="eyebrow">MODEL PRICES</div><h2>Available models and rates</h2><p id="model-status" class="muted">Per million tokens. Access is checked after connecting to your provider.</p><div id="model-prices" class="price-list">Loading…</div><p class="source-note">Source checked <span id="price-date">—</span> · <a id="price-source" href="https://developers.openai.com/api/docs/pricing/">OpenAI pricing</a></p></section>
+        <section class="panel"><div class="eyebrow">LIVE POLICIES</div><h2>Promoted task routes</h2><div id="policies" class="policy-list"><p class="muted">Connect to view policies.</p></div></section>
+      </aside>
+    </section>
+    <section id="result-section" class="panel hidden"><div class="section-title"><div><div class="eyebrow">03 / INSPECT THE RESULTS</div><h2 id="result-title">Comparison results</h2></div><button class="button secondary" id="export" type="button">Export run JSON</button></div><div id="result-summary"></div><div class="table-wrap"><table><thead><tr><th>Candidate</th><th>Model</th><th>Quality</th><th>Est. cost / case</th><th>p50 / p95 ms</th><th>Errors</th><th>Action</th></tr></thead><tbody id="summary-rows"></tbody></table></div><h3>Case-by-case output review</h3><div id="case-results" class="case-results"></div></section>
+    <section class="panel history"><div class="section-title"><div><div class="eyebrow">LOCAL EXPERIMENT HISTORY</div><h2>Past comparisons</h2></div><button class="button secondary" id="refresh-history" type="button">Refresh</button></div><div id="history-list" class="history-list"><p class="muted">Connect to view saved runs.</p></div></section>
+    <footer><p>Live experiment data stays in the local SQLite database. The public Pages site is static and cannot make model calls.</p><p><a href="https://github.com/HariHaran9597/llm-cost-cutter">Source and setup guide on GitHub</a></p></footer>
   </main>
 </body>
 </html>

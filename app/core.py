@@ -5,9 +5,8 @@ import json
 import os
 import re
 import sqlite3
-import time
 from dataclasses import dataclass
-from datetime import date, datetime, timezone
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -49,10 +48,11 @@ def choose_model(text: str, cheap_model: str, baseline_model: str, requested_tie
 @dataclass
 class Settings:
     upstream_base_url: str = os.getenv("UPSTREAM_BASE_URL", "https://api.openai.com/v1").rstrip("/")
-    upstream_api_key: str = os.getenv("UPSTREAM_API_KEY", "")
+    upstream_api_key: str = os.getenv("UPSTREAM_API_KEY") or os.getenv("OPENAI_API_KEY", "")
     gateway_api_token: str = os.getenv("GATEWAY_API_TOKEN", "")
-    cheap_model: str = os.getenv("CHEAP_MODEL", "gpt-4.1-mini")
-    baseline_model: str = os.getenv("BASELINE_MODEL", "gpt-4.1")
+    cheap_model: str = os.getenv("CHEAP_MODEL", "gpt-6-luna")
+    baseline_model: str = os.getenv("BASELINE_MODEL", "gpt-6.1-sol")
+    judge_model: str = os.getenv("JUDGE_MODEL", os.getenv("BASELINE_MODEL", "gpt-6.1-sol"))
     demo_mode: bool = os.getenv("LLMCUTTER_DEMO_MODE", "true").lower() in {"true", "1", "yes"}
     max_requests_per_minute: int = int(os.getenv("MAX_REQUESTS_PER_MINUTE", "30"))
     max_daily_spend_usd: float = float(os.getenv("MAX_DAILY_SPEND_USD", "5.00"))
@@ -74,6 +74,8 @@ def init_db(path: str) -> None:
         )""")
         db.execute("CREATE INDEX IF NOT EXISTS usage_created_at_idx ON usage(created_at)")
         db.execute("CREATE TABLE IF NOT EXISTS exact_cache (cache_key TEXT PRIMARY KEY, response_json TEXT NOT NULL, created_at TEXT NOT NULL)")
+        db.execute("CREATE TABLE IF NOT EXISTS experiments (id TEXT PRIMARY KEY, name TEXT NOT NULL, task_type TEXT NOT NULL, scorer TEXT NOT NULL, created_at TEXT NOT NULL, payload_json TEXT NOT NULL, results_json TEXT NOT NULL)")
+        db.execute("CREATE TABLE IF NOT EXISTS routing_policies (task_type TEXT PRIMARY KEY, model TEXT NOT NULL, system_prompt TEXT NOT NULL, user_template TEXT NOT NULL, experiment_id TEXT NOT NULL, variant_id TEXT NOT NULL, quality_rate REAL NOT NULL, cost_per_case_usd REAL NOT NULL, updated_at TEXT NOT NULL)")
 
 
 def write_usage(path: str, row: dict[str, Any]) -> None:
